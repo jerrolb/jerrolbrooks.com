@@ -1,3 +1,9 @@
+# CHANGELOG
+
+## [0.2.0]
+
+* Added rough tic-tac-toe
+
 ## [0.1.1]
 
 * Update README.md and bump version
