@@ -1,0 +1,111 @@
+{
+  "extends": "react-app",
+  "settings": {
+      "react": {
+          "pragma": "React",
+          "version": "15.4.1"
+      }
+  },
+  "env": {
+    "amd": true,
+    "browser": true,
+    "jquery": true
+  },
+  "globals": {
+    "module": false,
+    "describe": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "before": false,
+    "after": false,
+    "it": false,
+    "expect": false,
+    "echostar_sdk_extension": false,
+    "App": false,
+    "Utils": false,
+    "Config": false,
+    "_": false,
+    "sdk": false,
+    "Backbone": false,
+    "Router": false,
+    "Promise": false
+  },
+  "rules": {
+    "brace-style": 2,
+    "no-bitwise": 0,
+    "curly": [2, "multi-line", "consistent"],
+    "eol-last": 2,
+    "no-self-assign": [2, {"props": true}],
+    "no-whitespace-before-property": 2,
+    "no-mixed-spaces-and-tabs": 2,
+    "object-curly-spacing": [2, "always"],
+    "template-curly-spacing": [2, "always"],
+    "space-infix-ops": 2,
+    "space-in-parens": 2,
+    "space-unary-ops": 2,
+    "no-unneeded-ternary": 2,
+    "no-multiple-empty-lines": [2 ,{"max": 1}],
+    "no-redeclare": 2,
+    "no-loop-func": 2,
+    "eqeqeq": 2,
+    "wrap-iife": [2, "any"],
+    "guard-for-in": 2,
+    "no-use-before-define": [2, {"functions": false}],
+    "new-cap": 2,
+    "no-caller": 2,
+    "no-extra-semi": 2,
+    "semi": 2,
+    "require-jsdoc": 0,
+    "valid-jsdoc": 0,
+    "dot-notation": 0,
+    "spaced-comment": 2,
+    "keyword-spacing": 2,
+    "space-before-blocks": 2,
+    "no-undef": 2,
+    "no-trailing-spaces": 2,
+    "no-cond-assign": 0,
+    "no-eq-null": 2,
+    "no-multi-spaces": 2,
+    "func-call-spacing": 2,
+    "camelcase": 1,
+    "no-extend-native": 2,
+    "no-new": 1,
+    "valid-typeof": 0,
+    "quotes": [2, "single"],
+    "no-extra-parens": 0,
+    "no-unused-vars": 1,
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "no-catch-shadow": 2,
+    "arrow-parens": [2, "always"],
+    "jsx-quotes": [2, "prefer-double"],
+    "no-var": 2,
+    "prefer-const": 2,
+    "react/jsx-curly-spacing": [2, "always"],
+    "react/prop-types": 2,
+    "react/jsx-closing-bracket-location": 2,
+    "react/jsx-closing-tag-location": 2,
+    "react/jsx-equals-spacing": [2, "never"],
+    "react/jsx-first-prop-new-line": [2, "multiline"],
+    "react/jsx-no-duplicate-props": 2,
+    "react/jsx-sort-default-props": [2, {"ignoreCase": true}],
+    "react/jsx-tag-spacing": 2,
+    "react/sort-prop-types": 2,
+    "react/sort-comp": [2, {
+        "order": [
+            "static-methods",
+            "instance-variables",
+            "lifecycle",
+            "getters",
+            "setters",
+            "everything-else",
+            "rendering"
+        ],
+        "groups": {
+            "rendering": [
+                "/^render.+$",
+                "render"
+            ]
+        }
+    }]
+  }
+}

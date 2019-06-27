@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [0.2.2]
+
+* Added .eslintrc, changed favicon.ico, created test folder
+
 ## [0.2.1]
 
 * Added simple UI
