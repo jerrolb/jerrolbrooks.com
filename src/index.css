@@ -2,6 +2,7 @@ body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin-top: 50px;
   margin-left: 50px;
+  background-color: blue;
 }
 
 ol, ul {
@@ -20,17 +21,17 @@ ol, ul {
 
 .square {
   background: #fff;
-  border: 1px solid #999;
+  border: 1px solid black;
   float: left;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 75px;
+  height: 100px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 75px;
+  width: 100px;
 }
 
 .square:focus {
@@ -48,4 +49,32 @@ ol, ul {
 
 .game-info {
   margin-left: 20px;
+}
+
+#janeLauren {
+  padding: 0;
+  margin: 0;
+  /* text-align: center;
+  margin: 0 auto; */
+  display: inline-block;
+  padding-left: 50px;
+  padding-right: 50px;
+  /* margin-bottom: 100px; */
+  /* padding: 100px; */
+}
+
+#kitty {
+  /* margin: 50px */
+}
+
+#k {
+  display: inline-block;
+}
+
+#puppy {
+  /* margin: 50px; */
+}
+
+#p {
+  display: inline-block;
 }
