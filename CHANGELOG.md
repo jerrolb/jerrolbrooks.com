@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [0.2.1]
+
+* Added simple UI
+* Bug fixes
+
 ## [0.2.0]
 
 * Added rough tic-tac-toe
