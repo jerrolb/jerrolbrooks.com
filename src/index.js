@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import kitty from './img/kitty.jpeg';
+import puppy from './img/puppy.jpeg';
 
 function Square(props) {
   return (
@@ -81,16 +83,25 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[history.length - 1];
-    const winner = calculateWinner(current.squares);
+    let winner = calculateWinner(current.squares);
 
     let status;
     if (winner) {
-      status = 'Winner: ' + winner;
+      winner = winner === "X" ? "Jane" : "Lauren";
+      status = "Winner: " + winner;
     }else{
-      status = 'Next player: ' + (this.state.xIsNext ? 'Jane': 'Lauren');
+      status = history.length === 10 ? `It's a draw!` : 'Next player: ' + (this.state.xIsNext ? 'Jane': 'Lauren');
     }
 
     return (
+      <div>
+      <div className="game-info">
+        <div style={{textAlign: "center"}}>
+          <p style={{fontSize: "100px", lineHeight: ".3"}}><b>VS</b></p>
+          <p style={{fontSize: "25px"}}><b>{status}</b></p>
+          <br />
+        </div>
+      </div>
       <div className="game">
         <div className="game-board">
           <Board
@@ -98,10 +109,7 @@ class Game extends React.Component {
             onClick={(i) => this.handleClick(i)}
           />
         </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
+      </div>
       </div>
     );
   }
@@ -130,6 +138,20 @@ function calculateWinner(squares) {
 // ========================================
 
 ReactDOM.render(
-    <Game />,
+  <div id="main">
+    <div id="k">
+      <p style={{float:"right", fontSize: "30px"}}><b>Jane</b></p>
+      <br />
+    <img id="kitty" src={kitty} width={300} height={300} alt="kitty" ></img>
+    </div>
+      <div id="janeLauren">
+        <Game />
+      </div>
+      <div id="p">
+        <p style={{float:"left", fontSize: "30px"}}><b>Lauren</b></p>
+        <br />
+    <img id="puppy" src={puppy} width={300} height={300} alt="puppy"></img>
+    </div>
+  </div>,
     document.getElementById('root')
 );
