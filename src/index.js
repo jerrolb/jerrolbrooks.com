@@ -120,15 +120,10 @@ class Game extends React.Component {
     }
 
     return (
-      <div>
-        <div className="game-info">
-          <div style={ { textAlign: 'center' } }>
-            <p style={ { fontSize: '100px', lineHeight: '.3' } }><b>VS</b></p>
-            <p style={ { fontSize: '25px' } }><b>{status}</b></p>
-            <br />
-          </div>
-        </div>
-        <div className="game" style={ { textAlign: 'center' } }>
+      <div style={ { textAlign: 'center' } }>
+        <p style={ { fontSize: '45px', lineHeight: '.1' } }><b>VS</b></p>
+        <p style={ { fontSize: '15px' } }><b>{status}</b></p>
+        <div className="game">
           <div className="game-board">
             <Board
               squares={ current.squares }
@@ -165,17 +160,17 @@ function calculateWinner(squares) {
 ReactDOM.render(
   <div id="main">
     <div id="k">
-      <p style={ { float:'right', fontSize: '30px' } }><b>Jane</b></p>
+      <p style={ { float:'right', fontSize: '20px' } }><b>Jane</b></p>
       <br />
-      <img id="kitty" src={ kitty } width={ 300 } height={ 300 } alt="kitty" ></img>
+      <img id="kitty" src={ kitty } width={ 100 } height={ 100 } alt="kitty" ></img>
     </div>
     <div id="janeLauren">
       <Game />
     </div>
     <div id="p">
-      <p style={ { float:'left', fontSize: '30px' } }><b>Lauren</b></p>
+      <p style={ { float:'left', fontSize: '20px' } }><b>Lauren</b></p>
       <br />
-      <img id="puppy" src={ puppy } width={ 300 } height={ 300 } alt="puppy"></img>
+      <img id="puppy" src={ puppy } width={ 100 } height={ 100 } alt="puppy"></img>
     </div>
   </div>,
   document.getElementById('root')
