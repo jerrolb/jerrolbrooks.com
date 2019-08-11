@@ -94,6 +94,18 @@ class Game extends React.Component {
     });
   }
 
+  resetState() {
+    this.setState(() => {
+      return {
+        squares: Array(9).fill(null),
+        history: [{
+          squares: Array(9).fill(null),
+        }],
+        xIsNext: true
+      };
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[history.length - 1];
@@ -101,10 +113,10 @@ class Game extends React.Component {
 
     let status;
     if (winner) {
-      winner = winner === 'X' ? 'Jane' : 'Lauren';
+      winner = winner === 'X' ? 'X' : 'O';
       status = 'Winner: ' + winner;
     } else {
-      status = history.length === 10 ? 'It\'s a draw!' : 'Next player: ' + (this.state.xIsNext ? 'Jane' : 'Lauren');
+      status = history.length === 10 ? 'It\'s a draw!' : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
     return (
@@ -116,12 +128,13 @@ class Game extends React.Component {
             <br />
           </div>
         </div>
-        <div className="game">
+        <div className="game" style={ { textAlign: 'center' } }>
           <div className="game-board">
             <Board
               squares={ current.squares }
               onClick={ (i) => this.handleClick(i) }
             />
+            <button style={ { marginTop: '25px' } }onClick={ () => this.resetState() }>Start Over</button>
           </div>
         </div>
       </div>
