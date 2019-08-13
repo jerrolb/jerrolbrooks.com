@@ -1,0 +1,7 @@
+#!/bin/bash
+npm run build
+cd firebase
+rm -rf $(ls | grep -v firebase.json)
+cp -r ../build/* .
+firebase deploy
+cd ..

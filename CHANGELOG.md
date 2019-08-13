@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [0.3.0]
+
+* Added Start Over button
+* Reduced UI component sizes
+
 ## [0.2.2]
 
 * Added .eslintrc, changed favicon.ico, created test folder
