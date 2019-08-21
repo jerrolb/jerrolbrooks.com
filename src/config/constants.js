@@ -9,3 +9,7 @@ export const ROUTES = {
     TICTACTOE: '/games/tictactoe',
     DICEROLLER: '/games/diceroller'
 };
+
+export const LINKS = {
+    GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com'
+};
