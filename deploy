@@ -5,3 +5,4 @@ rm -rf $(ls | grep -v firebase.json)
 cp -r ../build/* .
 firebase deploy
 cd ..
+rm -rf build

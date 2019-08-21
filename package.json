@@ -1,12 +1,14 @@
 {
   "name": "jerrol",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "private": true,
   "dependencies": {
+    "antd": "^3.22.0",
     "lodash": "^4.17.15",
     "lodash.template": "^4.5.0",
     "moment": "^2.24.0",
     "react": "^16.8.6",
+    "react-app": "^1.1.2",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
@@ -33,7 +35,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "antd": "^3.21.4"
-  }
+  "devDependencies": {}
 }
