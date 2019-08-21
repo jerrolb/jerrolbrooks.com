@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.5.0]
+* Add rough version of Dice Roller
+
 ## [0.4.1]
 * Update build and deploy process
 
