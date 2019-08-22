@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ROUTES } from './config/constants';
-import { Header, LeftSider, RightSider, Footer } from './components';
+import { Header, Footer } from './components';
 import { Game } from './games/tictactoe/tictactoe.js';
 import { Dice } from './games/diceroller/dice.js';
 import './App.css';
@@ -26,21 +26,15 @@ class App extends React.Component {
             <div className="App">
                 <Router>
                     <Layout>
-                        <header className="App-header">
-                            <Header />
-                        </header>
+                        <Header />
                         <Layout style={ contentStyle }>
-                            <LeftSider />
+                            {/* <LeftSider /> */}
                             <Content>
-                                {/* <Route path={ ROUTES.HOME } component={ this.home } /> */}
                                 <Route path={ ROUTES.TICTACTOE } component={ this.ticTacToe } />
                                 <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />
                             </Content>
-                            <RightSider />
                         </Layout>
-                        <footer>
-                            <Footer />
-                        </footer>
+                        <Footer />
                     </Layout>
                 </Router>
             </div>

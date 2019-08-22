@@ -134,7 +134,7 @@ export class Game extends React.Component {
               squares={ current.squares }
               onClick={ (i) => this.handleClick(i) }
             />
-            <button style={ { marginTop: '25px' } }onClick={ () => this.resetState() }>Start Over</button>
+            <button style={ { marginTop: '10px' } }onClick={ () => this.resetState() }>Start Over</button>
           </div>
         </div>
       </div>
