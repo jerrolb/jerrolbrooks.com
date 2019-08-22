@@ -5,8 +5,22 @@ export class Dice extends React.Component {
   state = {
       log: '',
       n: 1,
-      mod: 0
+      mod: 0,
+      buttons: [
+          'n',
+          'd4',
+          'd6',
+          'd8',
+          'd10',
+          'd12',
+          'd20',
+          'mod'
+      ]
   };
+
+  componentDidMount() {
+      document.getElementById('d4').focus();
+  }
 
     timeStamp = () => {
         const monthArr = [
@@ -77,6 +91,54 @@ export class Dice extends React.Component {
         this.setState({ n: event.target.value });
     }
 
+    handleKeyPress = (e) => {
+        if (e.keyCode === 37) { // Left
+            const currButton = this.state.buttons.indexOf(e.target.id);
+            const prevButton = this.state.buttons[currButton - 1]
+                ? this.state.buttons[currButton - 1]
+                : null;
+
+            if (currButton === this.state.buttons.length - 1) {
+                this.setState({ mod: e.target.value });
+                if (e.target.value.charAt(0) === '+') {
+                    document.getElementById('mod').value = '+' + (Number(e.target.value.slice(1)) + 1);
+                } else if (
+                    e.target.value === Number(0)
+                    || e.target.value === String(0)
+                ) {
+                    document.getElementById('mod').value = '+1';
+                } else {
+                    document.getElementById('mod').value = (Number(e.target.value) + 1);
+                }
+            }
+
+            return prevButton
+                ? document.getElementById(prevButton).focus()
+                : false;
+        }
+        if (e.keyCode === 39) { // Right
+            const currButton = this.state.buttons.indexOf(e.target.id);
+            const nextButton = this.state.buttons[currButton + 1]
+                ? this.state.buttons[currButton + 1]
+                : null;
+
+            if (currButton === 0) {
+                this.setState({ n: Number(e.target.value) });
+                document.getElementById('n').value -= 1;
+            }
+
+            return nextButton
+                ? document.getElementById(nextButton).focus()
+                : false;
+        }
+        if (e.keyCode === 40) { // Down
+            if (document.activeElement.className === 'diceroll') {document.getElementById('logbutton').focus();}
+        }
+        if (e.keyCode === 38) { // Up
+            if (e.target.id === 'logbutton') {document.getElementById('d4').focus();}
+        }
+    }
+
     renderLog = () => {
         return (
             <div dangerouslySetInnerHTML={ { __html: this.state.log } }>
@@ -90,7 +152,8 @@ export class Dice extends React.Component {
                 <p className="nobr">n</p>
                 <select
                     id="n"
-                    defaultValue={ 1 }
+                    defaultValue={ this.state.n }
+                    onKeyDown={ this.handleKeyPress }
                     onClick={ this.setN }
                 >
                     <option>1</option>
@@ -105,16 +168,17 @@ export class Dice extends React.Component {
                     <option>10</option>
                 </select>
 
-                <button id="d4" className="diceroll" onClick={ this.dieRoll }>d4</button>
-                <button id="d6" className="diceroll" onClick={ this.dieRoll }>d6</button>
-                <button id="d8" className="diceroll" onClick={ this.dieRoll }>d8</button>
-                <button id="d10" className="diceroll" onClick={ this.dieRoll }>d10</button>
-                <button id="d12" className="diceroll" onClick={ this.dieRoll }>d12</button>
-                <button id="d20" className="diceroll" onClick={ this.dieRoll }>d20</button>
+                <button id="d4" className="diceroll" onKeyDown={ this.handleKeyPress } onClick={ this.dieRoll }>d4</button>
+                <button id="d6" className="diceroll" onKeyDown={ this.handleKeyPress } onClick={ this.dieRoll }>d6</button>
+                <button id="d8" className="diceroll" onKeyDown={ this.handleKeyPress } onClick={ this.dieRoll }>d8</button>
+                <button id="d10" className="diceroll" onKeyDown={ this.handleKeyPress } onClick={ this.dieRoll }>d10</button>
+                <button id="d12" className="diceroll" onKeyDown={ this.handleKeyPress } onClick={ this.dieRoll }>d12</button>
+                <button id="d20" className="diceroll" onKeyDown={ this.handleKeyPress } onClick={ this.dieRoll }>d20</button>
 
                 <select
                     id="mod"
-                    defaultValue={ 0 }
+                    defaultValue={ this.state.mod }
+                    onKeyDown={ this.handleKeyPress }
                     onClick={ this.setMod }
                 >
                     <option>-10</option>
@@ -142,8 +206,8 @@ export class Dice extends React.Component {
 
                 <p className="nobr">mod</p>
 
-                <div id="logcontainer">
-                    <button id="logbutton">ROLL LOG</button>
+                <div id="logcontainer" onKeyDown={ this.handleKeyPress }>
+                    <button id="logbutton" onKeyDown={ this.handleKeyPress }>ROLL LOG</button>
                     <ul id="log">
                         { this.renderLog() }
                     </ul>
@@ -155,36 +219,3 @@ export class Dice extends React.Component {
 
 export default Dice;
 
-// TODO: Add keyboard navigation
-// $(document).keydown(
-//     function(e)
-//       {
-//         if (e.keyCode == 37) {
-//           if (document.activeElement.id == 'd4') {document.getElementById('n').focus();}
-//           if (document.activeElement.id == 'd6') {document.getElementById('d4').focus();}
-//           if (document.activeElement.id == 'd8') {document.getElementById('d6').focus();}
-//           if (document.activeElement.id == 'd10') {document.getElementById('d8').focus();}
-//           if (document.activeElement.id == 'd12') {document.getElementById('d10').focus();}
-//           if (document.activeconstlement.id == 'd20') {document.getElementById('d12').focus();}
-//           if (document.activeconstlement.id == 'mod') {document.getElementById('d20').focus();}
-//         }
-//         if (e.keyCode == 39) {
-//           if (document.activeElement.id == 'd20') {document.getElementById('mod').focus();}
-//           if (document.activeElement.id == 'd12') {document.getElementById('d20').focus();}
-//           if (document.activeElement.id == 'd10') {document.getElementById('d12').focus();}
-//           if (document.activeElement.id == 'd8') {document.getElementById('d10').focus();}
-//           if (document.activeElement.id == 'd6') {document.getElementById('d8').focus();}
-//           if (document.activeElement.id == 'd4') {document.getElementById('d6').focus();}
-//           if (document.activeElement.id == 'n') {document.getElementById('d4').focus();}
-//         }
-//         if (e.keyCode == 40) {
-//           if (document.activeElement.className == 'diceroll') {document.getElementById('logbutton').focus();}
-//           else if (document.activeElement.id == 'logbutton') {$('li:first').focus();}
-//           else if ($('li').is(':focus')) {$('li:focus').next().focus();}
-//         }
-//         if (e.keyCode == 38) {
-//           if (document.activeElement.id == 'logbutton') {document.getElementById('n').focus();}
-//           if ($('li:first').is(':focus')) {document.getElementById('logbutton').focus();}
-//           if ($('li').is(':focus')) {$('li:focus').prev().focus();}
-//         }
-//       });
