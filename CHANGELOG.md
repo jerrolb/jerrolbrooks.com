@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [0.5.1]
+* Use utility space better, more responsive
+* Temporarily redirect games/ endpoint to index.html
+
 ## [0.5.0]
 * Add rough version of Dice Roller
 

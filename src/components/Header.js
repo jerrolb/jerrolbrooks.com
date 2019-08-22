@@ -11,7 +11,7 @@ export class Header extends React.Component {
             left: '0',
             zIndex: '1',
             width: '100%',
-            height: '60px',
+            height: '5%',
             backgroundColor: 'lightGray',
         };
         const menuStyle = {
@@ -19,7 +19,7 @@ export class Header extends React.Component {
             listStyleType: 'none',
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: '15px'
+            height: 'inherit'
         };
         const menuItemStyle = {
             marginLeft: '20px',

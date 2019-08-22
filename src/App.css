@@ -1,3 +1,4 @@
-.App {
-  text-align: center;
+.ant-layout-sider {
+  min-width: 0px !important;
+  width: 8% !important;
 }

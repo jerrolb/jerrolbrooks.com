@@ -7,7 +7,6 @@ export class RightSider extends React.Component {
             position: 'fixed',
             right: '0',
             top: '0',
-            width: '75px',
             height: '100%',
             textAlign: 'center',
             backgroundColor: 'lightGray'
