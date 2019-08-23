@@ -122,9 +122,9 @@ export class TicTacToe extends React.Component {
         return (
             <div>
                 <div style={ { display: 'flex', alignItems: 'center', justifyContent: 'center' } }>
-                    <img id="kitty" src={ kitty } width={ 100 } height={ 100 } alt="kitty" ></img>
+                    <img id="kitty" src={ kitty } width={ 75 } height={ 75 } alt="kitty" ></img>
                     <p style={ { fontSize: '45px', lineHeight: '.1' } }><b>VS</b></p>
-                    <img id="puppy" src={ puppy } width={ 100 } height={ 100 } alt="puppy"></img>
+                    <img id="puppy" src={ puppy } width={ 75 } height={ 75 } alt="puppy"></img>
                 </div>
                 <p style={ { fontSize: '15px' } }><b>{status}</b></p>
 
@@ -167,7 +167,7 @@ ReactDOM.render(
         <div id="k">
             <p style={ { float:'right', fontSize: '20px' } }><b>Jane</b></p>
             <br />
-            <img id="kitty" src={ kitty } width={ 100 } height={ 100 } alt="kitty" ></img>
+            <img id="kitty" src={ kitty } width={ 75 } height={ 75 } alt="kitty" ></img>
         </div>
         <div id="janeLauren">
             <TicTacToe />
@@ -175,7 +175,7 @@ ReactDOM.render(
         <div id="p">
             <p style={ { float:'left', fontSize: '20px' } }><b>Lauren</b></p>
             <br />
-            <img id="puppy" src={ puppy } width={ 100 } height={ 100 } alt="puppy"></img>
+            <img id="puppy" src={ puppy } width={ 75 } height={ 75 } alt="puppy"></img>
         </div>
     </div>,
     document.getElementById('root')
