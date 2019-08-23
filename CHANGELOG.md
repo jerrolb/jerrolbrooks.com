@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.5.2]
+* Dice roller keyboard navigation
+
 ## [0.5.1]
 * Use utility space better, more responsive
 * Temporarily redirect games/ endpoint to index.html
