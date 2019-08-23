@@ -6,20 +6,17 @@ import { ROUTES, SCREENS } from '../config/constants';
 export class Header extends React.Component {
     render () {
         const headerStyle = {
+            display: 'flex-box',
             position: 'fixed',
             top: '0',
             left: '0',
-            zIndex: '1',
             width: '100%',
-            height: '5%',
-            backgroundColor: 'lightGray',
+            zIndex: '1',
+            backgroundColor: 'darkGray',
         };
         const menuStyle = {
             display: 'flex',
-            listStyleType: 'none',
-            alignItems: 'center',
             justifyContent: 'center',
-            height: 'inherit'
         };
         const menuItemStyle = {
             marginLeft: '20px',

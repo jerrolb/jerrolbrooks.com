@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ROUTES } from './config/constants';
 import { Header, Footer } from './components';
-import { Game } from './games/tictactoe/tictactoe.js';
+import { TicTacToe } from './games/tictactoe/tictactoe.js';
 import { Dice } from './games/diceroller/dice.js';
 import './App.css';
 import { Layout } from 'antd';
@@ -10,7 +10,7 @@ const { Content } = Layout;
 
 class App extends React.Component {
     ticTacToe = () => {
-        return <Game />;
+        return <TicTacToe />;
     }
 
     diceRoller = () => {
@@ -28,7 +28,6 @@ class App extends React.Component {
                     <Layout>
                         <Header />
                         <Layout style={ contentStyle }>
-                            {/* <LeftSider /> */}
                             <Content>
                                 <Route path={ ROUTES.TICTACTOE } component={ this.ticTacToe } />
                                 <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />

@@ -9,30 +9,29 @@ export class LeftSider extends React.Component {
             top: '0',
             left: '0',
             height: '100%',
-            textAlign: 'center',
-            backgroundColor: 'lightGray',
+            backgroundColor: 'darkGray',
             alignItems: 'center',
             justifyContent: 'center'
-        };
-        const menuStyle = {
-            display: 'flex',
-            listStyleType: 'none',
         };
 
         return (
             <div className="leftSider">
                 <Layout.Sider style={ leftSiderStyle }>
-                    <Menu
-                        mode="inline"
-                    >
-                        <Menu.Item style={ menuStyle } key={ 'FOO' }>
+                    <Menu>
+                        <Menu.Item key={ 'FOO' }>
                             <p>FOO</p>
                         </Menu.Item>
-                        <Menu.Item style={ menuStyle } key={ 'BAR' }>
+                        <Menu.Item key={ 'BAR' }>
                             <p>BAR</p>
                         </Menu.Item>
-                        <Menu.Item style={ menuStyle } key={ 'BAZ' }>
+                        <Menu.Item key={ 'BAZ' }>
                             <p>BAZ</p>
+                        </Menu.Item>
+                        <Menu.Item key={ 'QUX' }>
+                            <p>QUX</p>
+                        </Menu.Item>
+                        <Menu.Item key={ 'TLDR' }>
+                            <p>TLDR</p>
                         </Menu.Item>
                     </Menu>
                 </Layout.Sider>

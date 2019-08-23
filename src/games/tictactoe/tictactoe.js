@@ -64,7 +64,7 @@ class Board extends React.Component {
   }
 }
 
-export class Game extends React.Component {
+export class TicTacToe extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -170,7 +170,7 @@ ReactDOM.render(
             <img id="kitty" src={ kitty } width={ 100 } height={ 100 } alt="kitty" ></img>
         </div>
         <div id="janeLauren">
-            <Game />
+            <TicTacToe />
         </div>
         <div id="p">
             <p style={ { float:'left', fontSize: '20px' } }><b>Lauren</b></p>
