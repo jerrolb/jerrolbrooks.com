@@ -11,7 +11,6 @@ export class Header extends React.Component {
             top: '0',
             left: '0',
             width: '100%',
-            zIndex: '1',
             backgroundColor: 'darkGray',
         };
         const menuStyle = {
