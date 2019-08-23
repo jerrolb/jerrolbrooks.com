@@ -22,7 +22,7 @@ export class Footer extends React.Component {
                 <Layout.Footer style={ footerStyle }>
                     <Menu style={ menuStyle }>
                         <Menu.Item key={ 'GITHUB' }>
-                            <a href={ LINKS.GITHUB }>View source on GitHub</a>
+                            <a href={ LINKS.GITHUB } target={ '_blank' }>View source on GitHub</a>
                         </Menu.Item>
                     </Menu>
                 </Layout.Footer>
