@@ -180,3 +180,5 @@ ReactDOM.render(
     </div>,
     document.getElementById('root')
 );
+
+export default TicTacToe;
