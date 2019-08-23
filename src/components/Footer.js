@@ -5,20 +5,16 @@ import { LINKS } from '../config/constants';
 export class Footer extends React.Component {
     render () {
         const footerStyle = {
+            display: 'flex-box',
             position: 'fixed',
             bottom: '0',
             left: '0',
             width: '100%',
-            height: '5%',
-            textAlign: 'center',
-            backgroundColor: 'lightGray'
+            backgroundColor: 'darkGray'
         };
         const menuStyle = {
             display: 'flex',
-            listStyleType: 'none',
-            alignItems: 'center',
             justifyContent: 'center',
-            height: 'inherit'
         };
 
         return (
