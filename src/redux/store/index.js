@@ -1,10 +1,20 @@
 import { createStore, combineReducers } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import diceReducer from '../reducers/diceReducer';
 import ticTacToeReducer from '../reducers/ticTacToeReducer';
 
-const store = createStore(combineReducers({
+const persistConfig = {
+    key: 'root',
+    storage
+};
+
+const combinedReducers = combineReducers({
     dice: diceReducer,
     ticTacToe: ticTacToeReducer
-}));
+});
 
-export default store;
+const persistedReducer = persistReducer(persistConfig, combinedReducers);
+
+export const store = createStore(persistedReducer);
+export const persistor = persistStore(store);
