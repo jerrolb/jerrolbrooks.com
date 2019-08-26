@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [0.6.0]
+* Added Redux for handling state
+* Added Redux-persist to persist state between sessions
+
 ## [0.5.2]
 * Dice roller keyboard navigation
 
