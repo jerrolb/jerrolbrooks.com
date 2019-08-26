@@ -1,9 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import './tictactoe.css';
 import kitty from '../../img/kitty.jpeg';
 import puppy from '../../img/puppy.jpeg';
+import {
+    updateXIsNext,
+    updateSquares,
+    updateHistory
+} from '../../redux/actions/ticTacToeActions';
 
 function Square(props) {
     return (
@@ -19,64 +24,61 @@ Square.propTypes = {
 };
 
 class Board extends React.Component {
-  static propTypes = {
-      onClick: PropTypes.func.isRequired,
-      squares: PropTypes.array.isRequired,
-  };
+    static propTypes = {
+        onClick: PropTypes.func.isRequired,
+        squares: PropTypes.array.isRequired,
+    };
 
-  constructor(props) {
-      super(props);
-      this.state = {
-          squares: Array(9).fill(null),
-          xIsNext: true,
-      };
-  }
+    renderSquare(i) {
+        return (
+            <Square
+                value={ this.props.squares[i] }
+                onClick={ () => this.props.onClick(i) }
+            />
+        );
+    }
 
-  renderSquare(i) {
-      return (
-          <Square
-              value={ this.props.squares[i] }
-              onClick={ () => this.props.onClick(i) }
-          />
-      );
-  }
-
-  render() {
-      return (
-          <div>
-              <div className="board-row">
-                  {this.renderSquare(0)}
-                  {this.renderSquare(1)}
-                  {this.renderSquare(2)}
-              </div>
-              <div className="board-row">
-                  {this.renderSquare(3)}
-                  {this.renderSquare(4)}
-                  {this.renderSquare(5)}
-              </div>
-              <div className="board-row">
-                  {this.renderSquare(6)}
-                  {this.renderSquare(7)}
-                  {this.renderSquare(8)}
-              </div>
-          </div>
-      );
-  }
+    render() {
+        return (
+            <div>
+                <div className="board-row">
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
+                </div>
+            </div>
+        );
+    }
 }
 
 class TicTacToe extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            history: [{
-                squares: Array(9).fill(null),
-            }],
-            xIsNext: true,
-        };
+    static defaultProps = {
+        updateHistory: updateHistory,
+        updateSquares: updateSquares,
+        updateXIsNext: updateXIsNext,
+
+    }
+    static propTypes = {
+        history: PropTypes.array.isRequired,
+        squares: PropTypes.array.isRequired,
+        updateHistory: PropTypes.func.isRequired,
+        updateSquares: PropTypes.func.isRequired,
+        updateXIsNext: PropTypes.func.isRequired,
+        xIsNext: PropTypes.bool.isRequired,
     }
 
     handleClick(i) {
-        const history = this.state.history;
+        const history = this.props.history;
         const current = history[history.length - 1];
         const squares = current.squares.slice();
 
@@ -84,30 +86,25 @@ class TicTacToe extends React.Component {
             return;
         }
 
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = this.props.xIsNext ? 'X' : 'O';
 
-        this.setState({
-            history: history.concat([{
-                squares: squares,
-            }]),
-            xIsNext: !this.state.xIsNext,
-        });
+        this.props.updateHistory(history.concat([{
+            squares: squares,
+        }]));
+
+        this.props.updateXIsNext(!this.props.xIsNext);
     }
 
     resetState() {
-        this.setState(() => {
-            return {
-                squares: Array(9).fill(null),
-                history: [{
-                    squares: Array(9).fill(null),
-                }],
-                xIsNext: true
-            };
-        });
+        this.props.updateXIsNext(true);
+        this.props.updateSquares(Array(9).fill(null));
+        this.props.updateHistory([{
+            squares: Array(9).fill(null),
+        }]);
     }
 
     render() {
-        const history = this.state.history;
+        const history = this.props.history;
         const current = history[history.length - 1];
         let winner = calculateWinner(current.squares);
 
@@ -116,7 +113,7 @@ class TicTacToe extends React.Component {
             winner = winner === 'X' ? 'X' : 'O';
             status = 'Winner: ' + winner;
         } else {
-            status = history.length === 10 ? 'It\'s a draw!' : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            status = history.length === 10 ? 'It\'s a draw!' : 'Next player: ' + (this.props.xIsNext ? 'X' : 'O');
         }
 
         return (
@@ -162,23 +159,20 @@ function calculateWinner(squares) {
     return null;
 }
 
-ReactDOM.render(
-    <div id="main">
-        <div id="k">
-            <p style={ { float:'right', fontSize: '20px' } }><b>Jane</b></p>
-            <br />
-            <img id="kitty" src={ kitty } width={ 75 } height={ 75 } alt="kitty" ></img>
-        </div>
-        <div id="janeLauren">
-            <TicTacToe />
-        </div>
-        <div id="p">
-            <p style={ { float:'left', fontSize: '20px' } }><b>Lauren</b></p>
-            <br />
-            <img id="puppy" src={ puppy } width={ 75 } height={ 75 } alt="puppy"></img>
-        </div>
-    </div>,
-    document.getElementById('root')
-);
+function mapStateToProps (state) {
+    return {
+        xIsNext: state.ticTacToe.xIsNext,
+        squares: state.ticTacToe.squares,
+        history: state.ticTacToe.history
+    };
+}
 
-export default TicTacToe;
+function mapDispatchToProps (dispatch) {
+    return {
+        updateHistory: (history) => dispatch(updateHistory(history)),
+        updateSquares: (squares) => dispatch(updateSquares(squares)),
+        updateXIsNext: (xIsNext) => dispatch(updateXIsNext(xIsNext))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);
