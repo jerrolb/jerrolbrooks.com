@@ -1,27 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { BUTTONS, MONTHS } from './config/constants';
 import './dice.css';
+import {
+    updateN,
+    updateMod,
+    updateLog
+} from '../../redux/actions/diceActions';
 
-export class Dice extends React.Component {
+class Dice extends React.Component {
     static defaultProps = {
         buttons: BUTTONS,
-        months: MONTHS
+        months: MONTHS,
+        updateLog: updateLog,
+        updateMod: updateMod,
+        updateN: updateN
     }
     static propTypes = {
         buttons: PropTypes.array.isRequired,
+        log: PropTypes.string.isRequired,
+        mod: PropTypes.number.isRequired,
         months: PropTypes.array.isRequired,
+        n: PropTypes.number.isRequired,
+        updateLog: PropTypes.func.isRequired,
+        updateMod: PropTypes.func.isRequired,
+        updateN: PropTypes.func.isRequired
     };
 
-  state = {
-      log: '',
-      n: 1,
-      mod: 0,
-  };
-
-  componentDidMount() {
-      document.getElementById('d4').focus();
-  }
+    componentDidMount() {
+        document.getElementById('d4').focus();
+    }
 
     timeStamp = () => {
         const date = new Date();
@@ -35,53 +44,46 @@ export class Dice extends React.Component {
         return '[' + month + ' ' + day + ', ' + hours + ':' + minutes + ':' + seconds + ' ' + ampm + ']';
     }
 
-    // TODO: Do not use setState's callback
     dieRoll = (event) => {
+        this.props.updateN(Number(document.getElementById('n').value));
+        this.props.updateMod(Number(document.getElementById('mod').value));
+
         const d = event.target.innerHTML.slice(1);
-        this.setState({
-            n: document.getElementById('n').value,
-            mod: document.getElementById('mod').value
-        }, () => {
-            let mod = this.state.mod;
-            const rolls = [];
+        let mod = this.props.mod;
+        const rolls = [];
 
-            for (let i = 0; i < this.state.n; i++) {
-                rolls[i] = Math.floor(Math.random() * d) + 1;
-            }
+        for (let i = 0; i < this.props.n; i++) {
+            rolls[i] = Math.floor(Math.random() * d) + 1;
+        }
 
-            let rollsum = 0;
-            for (let j = 0; j < this.state.n; j++) {
-                rollsum += rolls[j];
-            }
+        let rollsum = 0;
+        for (let j = 0; j < this.props.n; j++) {
+            rollsum += rolls[j];
+        }
 
-            const total = rollsum + Number(mod);
+        const total = rollsum + Number(mod);
 
-            if (
-                this.state.mod === Number(0)
-                || this.state.mod === String(0)
-            ) {
-                mod = '';
-            }
+        if (
+            this.props.mod === Number(0)
+            || this.props.mod === String(0)
+        ) {
+            mod = '';
+        } else if (this.props.mod > 0) {
+            mod = '+' + this.props.mod;
+        }
 
-            if (this.state.mod > 0) {
-                mod = this.state.mod.charAt(0) === '+'
-                    ? this.state.mod
-                    : '+' + this.state.mod;
-            }
-
-            const timestamp = this.timeStamp();
-            const result = `<li tabindex='0'> ${ timestamp } You rolled <strong> ${ this.state.n }d${ d }${ mod } </strong> for <strong> ${ total } </strong></li>`;
-            const newResult = result + this.state.log;
-            this.setState({ log: newResult });
-        });
+        const timestamp = this.timeStamp();
+        const result = `<li tabindex='0'> ${ timestamp } You rolled <strong> ${ this.props.n }d${ d }${ mod } </strong> for <strong> ${ total } </strong></li>`;
+        const newResult = result + this.props.log;
+        this.props.updateLog(newResult);
     }
 
     setMod = (event) => {
-        this.setState({ mod: event.target.value });
+        this.props.updateMod(Number(event.target.value));
     }
 
     setN = (event) => {
-        this.setState({ n: event.target.value });
+        this.props.updateN(Number(event.target.value));
     }
 
     handleKeyPress = (event) => {
@@ -98,7 +100,7 @@ export class Dice extends React.Component {
                 : null;
 
             if (currButton === this.props.buttons.length - 1) {
-                this.setState({ mod: event.target.value });
+                this.props.updateMod(Number(event.target.value));
                 if (event.target.value.charAt(0) === '+') {
                     const result = '+' + (Number(event.target.value.slice(1)) + 1);
                     if (result === '+11') {
@@ -126,7 +128,7 @@ export class Dice extends React.Component {
                 : null;
 
             if (currButton === 0) {
-                this.setState({ n: Number(event.target.value) });
+                this.props.updateN(Number(event.target.value));
                 document.getElementById('n').value -= 1;
             }
 
@@ -151,7 +153,7 @@ export class Dice extends React.Component {
     renderLog = () => {
         return (
             // TODO: Do not use dangerouslySetInnerHTML
-            <div dangerouslySetInnerHTML={ { __html: this.state.log } }></div>
+            <div dangerouslySetInnerHTML={ { __html: this.props.log } }></div>
         );
     }
 
@@ -161,7 +163,7 @@ export class Dice extends React.Component {
                 <p className="nobr">n</p>
                 <select
                     id="n"
-                    defaultValue={ this.state.n }
+                    defaultValue={ this.props.n }
                     onClick={ this.setN }
                     onKeyDown={ this.handleKeyPress }
                 >
@@ -186,7 +188,7 @@ export class Dice extends React.Component {
 
                 <select
                     id="mod"
-                    defaultValue={ this.state.mod }
+                    defaultValue={ this.props.mod }
                     onClick={ this.setMod }
                     onKeyDown={ this.handleKeyPress }
                 >
@@ -227,4 +229,20 @@ export class Dice extends React.Component {
     }
 }
 
-export default Dice;
+function mapStateToProps (state) {
+    return {
+        n: state.dice.n,
+        mod: state.dice.mod,
+        log: state.dice.log
+    };
+}
+
+function mapDispatchToProps (dispatch) {
+    return {
+        updateN: (n) => dispatch(updateN(n)),
+        updateMod: (mod) => dispatch(updateMod(mod)),
+        updateLog: (log) => dispatch(updateLog(log))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dice);
