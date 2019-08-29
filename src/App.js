@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ROUTES } from './config/constants';
 import { Header, LeftSider } from './components';
@@ -9,44 +8,32 @@ import './App.css';
 import { Layout } from 'antd';
 const { Content } = Layout;
 
-class App extends React.Component {
-    ticTacToe = () => {
+const App = () => {
+    const ticTacToe = () => {
         return <TicTacToe />;
-    }
+    };
 
-    diceRoller = () => {
+    const diceRoller = () => {
         return <Dice />;
-    }
+    };
 
-    api = () => {
+    const api = () => {
         return <Api />;
-    }
-
-    render () {
-        return (
-            <Router>
-                <Header />
-                <Layout>
-                    <LeftSider />
-                    <Content>
-                        <Route path={ ROUTES.TICTACTOE } component={ this.ticTacToe } />
-                        <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />
-                        <Route path={ ROUTES.API } component={ this.api } />
-                    </Content>
-                </Layout>
-            </Router>
-        );
-    }
-}
-
-function mapStateToProps (state) {
-    return {
     };
-}
 
-function mapDispatchToProps (dispatch) {
-    return {
-    };
-}
+    return (
+        <Router>
+            <Header />
+            <Layout>
+                <LeftSider />
+                <Content>
+                    <Route path={ ROUTES.TICTACTOE } component={ ticTacToe } />
+                    <Route path={ ROUTES.DICEROLLER } component={ diceRoller } />
+                    <Route path={ ROUTES.API } component={ api } />
+                </Content>
+            </Layout>
+        </Router>
+    );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
