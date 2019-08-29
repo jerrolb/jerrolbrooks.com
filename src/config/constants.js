@@ -2,6 +2,7 @@ export const SCREENS = {
     HOME: '/',
     TICTACTOE: 'ticTacToe',
     DICEROLLER: 'diceRoller',
+    CHESS: 'chess',
     API: 'api'
 };
 
@@ -9,6 +10,7 @@ export const ROUTES = {
     HOME: '/',
     TICTACTOE: '/games/tictactoe',
     DICEROLLER: '/games/diceroller',
+    CHESS: '/games/chess',
     API: '/api'
 };
 
