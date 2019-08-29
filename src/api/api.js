@@ -22,13 +22,14 @@ export const Api = () => {
 
     return (
         <div style={ containerStyle }>
-            <p><strong>Making some simple RESTful API calls</strong>
+            <div>
+                <p><strong>Making some simple RESTful API calls</strong></p>
                 <ul>
                     <li><a href={ LINKS.API.HELLO } target={ '_blank' }>Hello</a></li>
                     <li><a href={ LINKS.API.TEXTQUERY_PASS } target={ '_blank' }>Success</a></li>
                     <li><a href={ LINKS.API.TEXTQUERY_FAIL } target={ '_blank' }>Fail</a></li>
                 </ul>
-            </p>
+            </div>
             <br />
             Query
             <input

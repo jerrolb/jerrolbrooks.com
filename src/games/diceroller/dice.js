@@ -153,8 +153,12 @@ class Dice extends React.Component {
     renderLog = () => {
         return (
             // TODO: Do not use dangerouslySetInnerHTML
-            <div dangerouslySetInnerHTML={ { __html: this.props.log } }></div>
+            <div dangerouslySetInnerHTML={ { __html: this.props.log } } />
         );
+    }
+
+    clearLog = () => {
+        this.props.updateLog('');
     }
 
     render() {
@@ -218,8 +222,12 @@ class Dice extends React.Component {
 
                 <p className="nobr">mod</p>
 
-                <div id="logcontainer" onKeyDown={ this.handleKeyPress }>
-                    <button id="logbutton" onKeyDown={ this.handleKeyPress }>ROLL LOG</button>
+                <div
+                    id="logcontainer"
+                    onKeyDown={ this.handleKeyPress }
+                    style={ { overflowY: 'scroll' } }
+                >
+                    <button id="logbutton" onClick={ this.clearLog }>Clear Log</button>
                     <ul id="log">
                         { this.renderLog() }
                     </ul>
