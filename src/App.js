@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ROUTES } from './config/constants';
-import { Header, Footer } from './components';
+import { Header, LeftSider } from './components';
 import { TicTacToe, Dice } from './games';
+import { Api } from './api';
 import './App.css';
 import { Layout } from 'antd';
 const { Content } = Layout;
@@ -17,26 +18,23 @@ class App extends React.Component {
         return <Dice />;
     }
 
-    render () {
-        const contentStyle = {
-            marginTop: '50px'
-        };
+    api = () => {
+        return <Api />;
+    }
 
+    render () {
         return (
-            <div className="App">
-                <Router>
-                    <Layout>
-                        <Header />
-                        <Layout style={ contentStyle }>
-                            <Content>
-                                <Route path={ ROUTES.TICTACTOE } component={ this.ticTacToe } />
-                                <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />
-                            </Content>
-                        </Layout>
-                        <Footer />
-                    </Layout>
-                </Router>
-            </div>
+            <Router>
+                <Header />
+                <Layout>
+                    <LeftSider />
+                    <Content>
+                        <Route path={ ROUTES.TICTACTOE } component={ this.ticTacToe } />
+                        <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />
+                        <Route path={ ROUTES.API } component={ this.api } />
+                    </Content>
+                </Layout>
+            </Router>
         );
     }
 }

@@ -12,3 +12,4 @@
 #firebase
 /firebase/*
 !firebase/firebase.json
+!firebase/functions/
