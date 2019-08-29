@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.7.0]
+* Start Chess
+* Bug fixes
+* Improve UI
+* Utilize ant design styles
+
 ## [0.6.0]
 * Added Redux for handling state
 * Added Redux-persist to persist state between sessions

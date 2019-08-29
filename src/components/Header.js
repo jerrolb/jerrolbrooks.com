@@ -18,6 +18,9 @@ const Header = () => {
                 <Menu.Item key={ SCREENS.TICTACTOE }>
                     <NavLink to={ ROUTES.TICTACTOE } className="nav-text">Tic-Tac-Toe</NavLink>
                 </Menu.Item>
+                <Menu.Item key={ SCREENS.CHESS }>
+                    <NavLink to={ ROUTES.CHESS } className="nav-text">Chess</NavLink>
+                </Menu.Item>
                 <Menu.Item key={ SCREENS.DICEROLLER }>
                     <NavLink to={ ROUTES.DICEROLLER } className="nav-text">Dice Roller</NavLink>
                 </Menu.Item>
