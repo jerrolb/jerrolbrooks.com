@@ -18,8 +18,8 @@ const Header = () => {
     return (
         <Layout.Header style={ headerStyle }>
             <Menu style={ menuStyle }>
-                <Menu.Item key={ SCREENS.HOME }>
-                    <NavLink to={ ROUTES.HOME } className="nav-text">Home</NavLink>
+                <Menu.Item key={ 'API' }>
+                    <NavLink to={ ROUTES.API } className="nav-text">Api</NavLink>
                 </Menu.Item>
                 <Menu.Item key={ SCREENS.TICTACTOE }>
                     <NavLink to={ ROUTES.TICTACTOE } className="nav-text">Tic-Tac-Toe</NavLink>
