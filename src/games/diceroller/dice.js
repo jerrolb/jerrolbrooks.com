@@ -167,9 +167,12 @@ class Dice extends React.Component {
                 <p className="nobr">n</p>
                 <select
                     id="n"
+                    // TODO: Clean up this logic
                     defaultValue={ this.props.n }
                     onClick={ this.setN }
+                    onChange={ this.setN }
                     onKeyDown={ this.handleKeyPress }
+
                 >
                     <option>1</option>
                     <option>2</option>
@@ -192,8 +195,10 @@ class Dice extends React.Component {
 
                 <select
                     id="mod"
+                    // TODO: Clean up this logic
                     defaultValue={ this.props.mod }
                     onClick={ this.setMod }
+                    onChange={ this.setMod }
                     onKeyDown={ this.handleKeyPress }
                 >
                     <option>-10</option>
