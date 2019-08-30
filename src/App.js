@@ -8,37 +8,49 @@ import './App.css';
 import { Layout } from 'antd';
 const { Content } = Layout;
 
-const App = () => {
-    const ticTacToe = () => {
+class App extends React.Component {
+
+    componentDidMount () {
+        if (
+            !Object.values(ROUTES).includes(window.location.pathname)
+            && window.location.pathname !== '/'
+        ) {
+            window.location.href = '/';
+        }
+    }
+
+    ticTacToe = () => {
         return <TicTacToe />;
     };
 
-    const diceRoller = () => {
+    diceRoller = () => {
         return <Dice />;
     };
 
-    const chess = () => {
+    chess = () => {
         return <Chess />;
     };
 
-    const api = () => {
+    api = () => {
         return <Api />;
     };
 
-    return (
-        <Router>
-            <Header />
-            <Layout>
-                <LeftSider />
-                <Content>
-                    <Route path={ ROUTES.TICTACTOE } component={ ticTacToe } />
-                    <Route path={ ROUTES.DICEROLLER } component={ diceRoller } />
-                    <Route path={ ROUTES.CHESS } component={ chess } />
-                    <Route path={ ROUTES.API } component={ api } />
-                </Content>
-            </Layout>
-        </Router>
-    );
-};
+    render() {
+        return (
+            <Router>
+                <Header />
+                <Layout>
+                    <LeftSider />
+                    <Content>
+                        <Route path={ ROUTES.TICTACTOE } component={ this.ticTacToe } />
+                        <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />
+                        <Route path={ ROUTES.CHESS } component={ this.chess } />
+                        <Route path={ ROUTES.API } component={ this.api } />
+                    </Content>
+                </Layout>
+            </Router>
+        );
+    }
+}
 
 export default App;
