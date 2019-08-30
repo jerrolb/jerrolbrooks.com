@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.7.1]
+* Improve the appearance of header and side menu -- utilize space
+* Make side menu responsive
+* Fix bug in Dice roller -- had not accounted for browsers that didn't trigger dispatch at the expected time
+* Fix bug where entering absolute url would rewrite to index.html leave garbage in the url bar -- send user to '/' if absolute url is not a set route
+
 ## [0.7.0]
 * Start Chess
 * Bug fixes
