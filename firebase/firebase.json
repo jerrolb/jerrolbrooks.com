@@ -6,16 +6,13 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "redirects": [
-      {
-        "source": "/games/**",
-        "destination": "/",
-        "type": 302
-      }
-    ],
     "rewrites": [
       { "source": "/api/textQuery", "function": "textQuery" },
-      { "source": "/api/hello", "function": "hello" }
+      { "source": "/api/hello", "function": "hello" },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   },
   "functions": {
