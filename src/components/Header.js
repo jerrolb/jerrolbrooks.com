@@ -4,16 +4,22 @@ import { Layout, Menu } from 'antd';
 import { ROUTES, SCREENS } from '../config/constants';
 
 const Header = () => {
+    const headerStyle = {
+        height: '50px',
+        padding: '0',
+    };
+
     const menuStyle = {
+        height: '48px',
         display: 'flex',
         justifyContent: 'center',
     };
 
     return (
-        <Layout.Header>
+        <Layout.Header style={ headerStyle }>
             <Menu style={ menuStyle }>
-                <Menu.Item key={ SCREENS.HOME }>
-                    <NavLink to={ ROUTES.HOME } className="nav-text">Home</NavLink>
+                <Menu.Item key={ 'API' }>
+                    <NavLink to={ ROUTES.API } className="nav-text">Api</NavLink>
                 </Menu.Item>
                 <Menu.Item key={ SCREENS.TICTACTOE }>
                     <NavLink to={ ROUTES.TICTACTOE } className="nav-text">Tic-Tac-Toe</NavLink>
