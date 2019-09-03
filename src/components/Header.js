@@ -6,13 +6,13 @@ import { ROUTES, SCREENS } from '../config/constants';
 const Header = () => {
     const headerStyle = {
         height: '50px',
-        padding: '0',
+        padding: '0'
     };
 
     const menuStyle = {
-        height: '48px',
+        height: '49px',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'center'
     };
 
     return (

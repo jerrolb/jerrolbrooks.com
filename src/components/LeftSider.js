@@ -6,8 +6,10 @@ import { ROUTES, LINKS, SCREENS } from '../config/constants';
 const LeftSider = () => {
     return (
         <Layout.Sider
-            breakpoint="lg"
+            breakpoint="md"
             collapsedWidth="0"
+            width={ 120 }
+            style={ { borderRight: '1px solid' } }
         >
             <Menu>
                 <Menu.Item key={ SCREENS.HOME }>
