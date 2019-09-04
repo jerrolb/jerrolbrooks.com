@@ -16,9 +16,15 @@ export const ROUTES = {
 
 export const LINKS = {
     GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com',
+    LINKEDIN: 'https://linkedin.com/in/jerrolb',
     API: {
         HELLO: 'https://jerrolbrooks.com/api/hello',
         TEXTQUERY_PASS: 'https://jerrolbrooks.com/api/textQuery?text=Some text',
         TEXTQUERY_FAIL: 'https://jerrolbrooks.com/api/textQuery'
     }
+};
+
+export const KEYS = {
+    GITHUB: 'GitHub',
+    LINKEDIN: 'LinkedIn'
 };

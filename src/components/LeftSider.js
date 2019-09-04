@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
-import { ROUTES, LINKS, SCREENS } from '../config/constants';
+import { ROUTES, LINKS, SCREENS, KEYS } from '../config/constants';
 
 const LeftSider = () => {
     return (
@@ -18,10 +18,16 @@ const LeftSider = () => {
                         Home
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key={ 'GITHUB' }>
+                <Menu.Item key={ KEYS.GITHUB }>
                     <a href={ LINKS.GITHUB } target={ '_blank' }>
                         <Icon type="github" />
                         GitHub
+                    </a>
+                </Menu.Item>
+                <Menu.Item key={ KEYS.LINKEDIN }>
+                    <a href={ LINKS.LINKEDIN } target={ '_blank' }>
+                        <Icon type="linkedin" />
+                        LinkedIn
                     </a>
                 </Menu.Item>
             </Menu>

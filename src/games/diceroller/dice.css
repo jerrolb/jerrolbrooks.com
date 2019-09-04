@@ -33,3 +33,11 @@ ul {
 #log {
   margin-right: 15px;
 }
+
+#log li:nth-child(odd) {
+  background-color: #e8f4f8;
+}
+
+#log li:focus {
+  background-color: #d4ebf2;
+}

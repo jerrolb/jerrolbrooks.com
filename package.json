@@ -1,6 +1,6 @@
 {
   "name": "jerrol",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "antd": "^3.22.0",

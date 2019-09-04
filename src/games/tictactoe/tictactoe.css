@@ -48,3 +48,7 @@
   font-size: larger;
   font-weight: bold;
 }
+
+#blurb {
+  text-decoration: underline;
+}

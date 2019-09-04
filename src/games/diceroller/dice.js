@@ -49,12 +49,12 @@ class Dice extends React.Component {
         const rolls = [];
         const n = this.props.n;
         let mod = this.props.mod;
+        let rollSum = 0;
 
         for (let index = 0; index < n; index++) {
             rolls[index] = Math.floor(Math.random() * dice) + 1;
         }
 
-        let rollSum = 0;
         for (let accumulator = 0; accumulator < n; accumulator++) {
             rollSum += rolls[accumulator];
         }
@@ -79,6 +79,27 @@ class Dice extends React.Component {
 
     setN = (event) => {
         this.props.updateN(Number(event.target.value));
+    }
+
+    iterateListItems = (direction) => {
+        const listItems = this.log.getElementsByTagName('li');
+        direction = direction === 'up' ? -1 : 1;
+
+        for (let item = 0; item < listItems.length; item++) {
+            if (!listItems[item + 1] && direction === 1) {
+                break;
+            }
+
+            if (document.activeElement === listItems[0] && direction === -1) {
+                this.clearLogBtn.focus();
+                break;
+            }
+
+            if (document.activeElement === listItems[item]) {
+                listItems[item + direction].focus();
+                break;
+            }
+        }
     }
 
     handleKeyPress = (event) => {
@@ -112,11 +133,23 @@ class Dice extends React.Component {
         case 40: // Down
             if (event.target.className === 'diceroll') {
                 this.clearLogBtn.focus();
+                return;
             }
+            if (event.target.id === 'clearLog') {
+                event.preventDefault();
+                this.log.getElementsByTagName('li')[0].focus();
+                return;
+            }
+
+            event.preventDefault();
+            this.iterateListItems('down');
             break;
         case 38: // Up
             if (event.target.id === 'clearLog') {
                 this.d4.focus();
+            } else {
+                event.preventDefault();
+                this.iterateListItems('up');
             }
             break;
         default:
@@ -138,6 +171,7 @@ class Dice extends React.Component {
     render() {
         return (
             <div id="container">
+                <p>Navigable with keyboard</p>
                 <p className="nobr">n</p>
                 <select
                     id="n"
@@ -200,15 +234,19 @@ class Dice extends React.Component {
 
                 <button
                     id="clearLog"
+                    ref={ (elem) => this.clearLogBtn = elem }
                     onClick={ this.clearLog }
                     onKeyDown={ this.handleKeyPress }
-                    ref={ (elem) => this.clearLogBtn = elem }
                 >
                     Clear Log
                 </button>
 
                 <div id="logContainer">
-                    <ul id="log">
+                    <ul
+                        id="log"
+                        ref={ (elem) => this.log = elem }
+                        onKeyDown={ this.handleKeyPress }
+                    >
                         { this.renderLog() }
                     </ul>
                 </div>

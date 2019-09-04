@@ -24,6 +24,12 @@ const Header = () => {
                         Api
                     </NavLink>
                 </Menu.Item>
+                <Menu.Item key={ SCREENS.DICEROLLER }>
+                    <NavLink to={ ROUTES.DICEROLLER } className="nav-text">
+                        <Icon type="dot-chart" />
+                        Dice Roller
+                    </NavLink>
+                </Menu.Item>
                 <Menu.Item key={ SCREENS.TICTACTOE }>
                     <NavLink to={ ROUTES.TICTACTOE } className="nav-text">
                         <Icon type="close-square" />
@@ -34,12 +40,6 @@ const Header = () => {
                     <NavLink to={ ROUTES.CHESS } className="nav-text">
                         <Icon type="play-square" />
                         Chess
-                    </NavLink>
-                </Menu.Item>
-                <Menu.Item key={ SCREENS.DICEROLLER }>
-                    <NavLink to={ ROUTES.DICEROLLER } className="nav-text">
-                        <Icon type="dot-chart" />
-                        Dice Roller
                     </NavLink>
                 </Menu.Item>
             </Menu>
