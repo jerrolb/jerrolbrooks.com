@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import './tictactoe.css';
-import kitty from '../../img/kitty.jpeg';
-import puppy from '../../img/puppy.jpeg';
 import {
     updateXIsNext,
     updateSquares,
     updateHistory
 } from '../../redux/actions/ticTacToeActions';
+import kitty from '../../img/kitty.jpeg';
+import puppy from '../../img/puppy.jpeg';
+import './tictactoe.css';
 
 class TicTacToe extends React.Component {
     static defaultProps = {
@@ -26,7 +26,7 @@ class TicTacToe extends React.Component {
         xIsNext: PropTypes.bool.isRequired,
     }
 
-    renderBoard () {
+    renderBoard() {
         return (
             <div>
                 <div>
@@ -48,10 +48,8 @@ class TicTacToe extends React.Component {
         );
     }
 
-    renderSquare (i) {
-        const history = this.props.history;
-        const current = history[history.length - 1];
-        const squares = current.squares;
+    renderSquare(i) {
+        const squares = this.getCurrentSquares();
 
         return (
             <button
@@ -63,10 +61,30 @@ class TicTacToe extends React.Component {
         );
     }
 
+    calculateWinner(squares) {
+        const lines = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        for (let i = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                return squares[a];
+            }
+        }
+
+        return null;
+    }
+
     handleClick(i) {
-        const history = this.props.history;
-        const current = history[history.length - 1];
-        const squares = current.squares.slice();
+        const squares = this.getCurrentSquares().slice();
 
         if (this.calculateWinner(squares) || squares[i]) {
             return;
@@ -74,11 +92,33 @@ class TicTacToe extends React.Component {
 
         squares[i] = this.props.xIsNext ? 'X' : 'O';
 
-        this.props.updateHistory(history.concat([{
-            squares: squares,
-        }]));
+        this.props.updateHistory(
+            this.props.history.concat([{
+                squares: squares,
+            }])
+        );
 
         this.props.updateXIsNext(!this.props.xIsNext);
+    }
+
+    undo() {
+        if (this.props.history.length === 1) {
+            return;
+        }
+
+        this.props.updateXIsNext(!this.props.xIsNext);
+
+        this.props.squares.pop();
+        this.props.updateSquares(this.props.squares);
+
+        this.props.history.pop();
+        this.props.updateHistory(this.props.history);
+    }
+
+    getCurrentSquares() {
+        const history = this.props.history;
+        const current = history[history.length - 1];
+        return current.squares;
     }
 
     resetState() {
@@ -89,38 +129,17 @@ class TicTacToe extends React.Component {
         }]);
     }
 
-    calculateWinner(squares) {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                return squares[a];
-            }
-        }
-        return null;
-    }
-
     render() {
-        const history = this.props.history;
-        const current = history[history.length - 1];
-        const winner = this.calculateWinner(current.squares);
+        const squares = this.getCurrentSquares();
+        const winner = this.calculateWinner(squares);
         let status;
 
         if (winner) {
             status = `Winner: ${ winner }`;
+        } else if (this.props.history.length === 10) {
+            status = 'It\'s a draw!';
         } else {
-            status = history.length === 10
-                ? 'It\'s a draw!'
-                : `Next player: ${ this.props.xIsNext ? 'X' : 'O' }`;
+            status = `Next player: ${ this.props.xIsNext ? 'X' : 'O' }`;
         }
 
         return (
@@ -138,8 +157,7 @@ class TicTacToe extends React.Component {
 
                 <div id="actionButtons">
                     <button onClick={ () => this.resetState() }>Start Over</button>
-                    <button onClick={ () => console.log('redo') }>Redo</button>
-                    <button onClick={ () => console.log('undo') }>Undo</button>
+                    <button onClick={ () => this.undo() }>Undo</button>
                 </div>
             </div>
         );
