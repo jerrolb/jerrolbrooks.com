@@ -59,12 +59,12 @@ class Dice extends React.Component {
             rollSum += rolls[accumulator];
         }
 
-        const total = rollSum + Number(mod);
+        const total = rollSum + mod;
 
-        if (mod === Number(0) || mod === String(0)) {
+        if (mod === 0) {
             mod = '';
         } else if (mod > 0) {
-            mod = '+' + mod;
+            mod = `+${ mod }`;
         }
 
         const timestamp = this.timeStamp();
@@ -86,7 +86,6 @@ class Dice extends React.Component {
         let nextButton;
         let prevButton;
 
-        // TODO: Refactor key handling -- this is just quick and ugly
         switch (event.keyCode) {
         case 37: // Left
             currButton = this.props.buttons.indexOf(event.target.id);
@@ -95,21 +94,7 @@ class Dice extends React.Component {
                 : null;
 
             if (currButton === this.props.buttons.length - 1) {
-                if (event.target.value.charAt(0) === '+') {
-                    const result = '+' + (Number(event.target.value.slice(1)) + 1);
-                    if (result === '+11') {
-                        this.mod.selectedIndex = this.mod.length - 1;
-                    } else {
-                        this.mod.value = '+' + (Number(event.target.value.slice(1)) + 1);
-                    }
-                } else if (
-                    event.target.value === Number(0)
-                    || event.target.value === String(0)
-                ) {
-                    this.mod.value = '+1';
-                } else {
-                    this.mod.value = (Number(event.target.value) + 1);
-                }
+                ++event.target.selectedIndex;
             }
 
             return prevButton ? this[prevButton].focus() : false;
@@ -120,17 +105,17 @@ class Dice extends React.Component {
                 : null;
 
             if (currButton === 0) {
-                this.n.value -= 1;
+                --event.target.selectedIndex;
             }
 
             return nextButton ? this[nextButton].focus() : false;
         case 40: // Down
             if (event.target.className === 'diceroll') {
-                this.logButton.focus();
+                this.clearLogBtn.focus();
             }
             break;
         case 38: // Up
-            if (event.target.id === 'logbutton') {
+            if (event.target.id === 'clearLog') {
                 this.d4.focus();
             }
             break;
@@ -141,7 +126,6 @@ class Dice extends React.Component {
 
     renderLog = () => {
         return (
-            // TODO: Do not use dangerouslySetInnerHTML
             <div dangerouslySetInnerHTML={ { __html: this.props.log } } />
         );
     }
@@ -214,15 +198,16 @@ class Dice extends React.Component {
 
                 <p className="nobr">mod</p>
 
-                <div id="logcontainer">
-                    <button
-                        id="logbutton"
-                        ref={ (elem) => this.logButton = elem }
-                        onClick={ this.clearLog }
-                    >
-                        Clear Log
-                    </button>
+                <button
+                    id="clearLog"
+                    onClick={ this.clearLog }
+                    onKeyDown={ this.handleKeyPress }
+                    ref={ (elem) => this.clearLogBtn = elem }
+                >
+                    Clear Log
+                </button>
 
+                <div id="logContainer">
                     <ul id="log">
                         { this.renderLog() }
                     </ul>

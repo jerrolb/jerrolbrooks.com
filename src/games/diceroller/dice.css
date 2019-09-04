@@ -16,14 +16,14 @@ ul {
   padding-top: 30px;
 }
 
-#logcontainer {
+#logContainer {
   border: 1px solid black;
   height: 75%;
   overflow-y: scroll;
   margin-top: 20px;
 }
 
-#logbutton {
+#clearLog {
   width: 80%;
   font-weight: bold;
   font-size: larger;
