@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 import { ROUTES, SCREENS } from '../config/constants';
 
 const Header = () => {
@@ -19,16 +19,28 @@ const Header = () => {
         <Layout.Header style={ headerStyle }>
             <Menu style={ menuStyle }>
                 <Menu.Item key={ 'API' }>
-                    <NavLink to={ ROUTES.API } className="nav-text">Api</NavLink>
+                    <NavLink to={ ROUTES.API } className="nav-text">
+                        <Icon type="api" />
+                        Api
+                    </NavLink>
                 </Menu.Item>
                 <Menu.Item key={ SCREENS.TICTACTOE }>
-                    <NavLink to={ ROUTES.TICTACTOE } className="nav-text">Tic-Tac-Toe</NavLink>
+                    <NavLink to={ ROUTES.TICTACTOE } className="nav-text">
+                        <Icon type="close-square" />
+                        Tic-Tac-Toe
+                    </NavLink>
                 </Menu.Item>
                 <Menu.Item key={ SCREENS.CHESS }>
-                    <NavLink to={ ROUTES.CHESS } className="nav-text">Chess</NavLink>
+                    <NavLink to={ ROUTES.CHESS } className="nav-text">
+                        <Icon type="play-square" />
+                        Chess
+                    </NavLink>
                 </Menu.Item>
                 <Menu.Item key={ SCREENS.DICEROLLER }>
-                    <NavLink to={ ROUTES.DICEROLLER } className="nav-text">Dice Roller</NavLink>
+                    <NavLink to={ ROUTES.DICEROLLER } className="nav-text">
+                        <Icon type="dot-chart" />
+                        Dice Roller
+                    </NavLink>
                 </Menu.Item>
             </Menu>
         </Layout.Header>
