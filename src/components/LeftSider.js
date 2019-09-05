@@ -18,6 +18,12 @@ const LeftSider = () => {
                         Home
                     </NavLink>
                 </Menu.Item>
+                <Menu.Item key={ SCREENS.ABOUT }>
+                    <NavLink to={ ROUTES.ABOUT } className="nav-text">
+                        <Icon type="info" />
+                        About
+                    </NavLink>
+                </Menu.Item>
                 <Menu.Item key={ KEYS.GITHUB }>
                     <a href={ LINKS.GITHUB } target={ '_blank' }>
                         <Icon type="github" />

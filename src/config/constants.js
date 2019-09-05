@@ -1,5 +1,6 @@
 export const SCREENS = {
     HOME: '/',
+    ABOUT: 'about',
     TICTACTOE: 'ticTacToe',
     DICEROLLER: 'diceRoller',
     CHESS: 'chess',
@@ -8,6 +9,7 @@ export const SCREENS = {
 
 export const ROUTES = {
     HOME: '/',
+    ABOUT: '/about',
     TICTACTOE: '/games/tictactoe',
     DICEROLLER: '/games/diceroller',
     CHESS: '/games/chess',
@@ -17,6 +19,9 @@ export const ROUTES = {
 export const LINKS = {
     GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com',
     LINKEDIN: 'https://linkedin.com/in/jerrolb',
+    REACT: 'https://reactjs.org/',
+    REDUX: 'https://redux.js.org/',
+    ANTD: 'https://ant.design/',
     API: {
         HELLO: 'https://jerrolbrooks.com/api/hello',
         TEXTQUERY_PASS: 'https://jerrolbrooks.com/api/textQuery?text=Some text',

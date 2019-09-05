@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ROUTES } from './config/constants';
-import { Header, LeftSider } from './components';
+import { Header, LeftSider, About } from './components';
 import { Api } from './api';
 import { TicTacToe, Dice, Chess } from './games';
 import './App.css';
@@ -19,21 +19,11 @@ class App extends React.Component {
         }
     }
 
-    ticTacToe = () => {
-        return <TicTacToe />;
-    };
-
-    diceRoller = () => {
-        return <Dice />;
-    };
-
-    chess = () => {
-        return <Chess />;
-    };
-
-    api = () => {
-        return <Api />;
-    };
+    ticTacToe = () => <TicTacToe />;
+    diceRoller = () => <Dice />;
+    chess = () => <Chess />;
+    api = () => <Api />;
+    about = () => <About />;
 
     render() {
         return (
@@ -46,6 +36,7 @@ class App extends React.Component {
                         <Route path={ ROUTES.DICEROLLER } component={ this.diceRoller } />
                         <Route path={ ROUTES.CHESS } component={ this.chess } />
                         <Route path={ ROUTES.API } component={ this.api } />
+                        <Route path={ ROUTES.ABOUT } component={ this.about } />
                     </Content>
                 </Layout>
             </Router>

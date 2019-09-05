@@ -1,3 +1,10 @@
 .ant-layout-content {
     min-height: calc(100vh - 50px) !important;
 }
+
+#about code {
+    padding: 3px;
+    border: 1px solid lightgray;
+    background-color: #efefef;
+    color: #ff6666;
+}
