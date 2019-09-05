@@ -25,22 +25,19 @@ const checkWidth = () => {
 
 const containerStyles = {
     width: checkWidth(),
+    margin: '0 auto',
     padding: '45px',
     fontSize: 'larger',
     textAlign: 'left'
 };
 
 window.addEventListener('resize', () => {
-    document.getElementById('container').style.width = checkWidth();
+    document.getElementById('aboutContainer').style.width = checkWidth();
 });
 
 const About = () => {
     return (
-        <div
-            id="container"
-            className="resizable"
-            style={ containerStyles }
-        >
+        <div id="aboutContainer" style={ containerStyles }>
             <div id="about">
                 <ReactMarkdown source={ markdownWithHtml } escapeHtml={ false } />
             </div>
