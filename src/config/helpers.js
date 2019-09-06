@@ -10,6 +10,6 @@ export const resetMenus = () => {
         });
 
         active[0].style.backgroundColor = '#e6f7ff';
-        active[0].children[0].style.color = 'rgba(0, 0, 0, 0.65)';
+        active[0].children[0].style.color = '#1890ff';
     }
 };
