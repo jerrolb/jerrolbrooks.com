@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 import { ROUTES, LINKS, SCREENS, KEYS } from '../config/constants';
+import { resetMenus } from '../config/helpers';
 
 const LeftSider = () => {
     return (
@@ -11,26 +12,38 @@ const LeftSider = () => {
             width={ 120 }
             style={ { borderRight: '1px solid' } }
         >
-            <Menu>
-                <Menu.Item key={ SCREENS.HOME }>
+            <Menu id="siderMenu">
+                <Menu.Item
+                    key={ SCREENS.HOME }
+                    onClick={ resetMenus }
+                >
                     <NavLink to={ ROUTES.HOME } className="nav-text">
                         <Icon type="home" />
                         Home
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key={ SCREENS.ABOUT }>
+                <Menu.Item
+                    key={ SCREENS.ABOUT }
+                    onClick={ resetMenus }
+                >
                     <NavLink to={ ROUTES.ABOUT } className="nav-text">
                         <Icon type="info" />
                         About
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key={ KEYS.GITHUB }>
+                <Menu.Item
+                    key={ KEYS.GITHUB }
+                    onClick={ resetMenus }
+                >
                     <a href={ LINKS.GITHUB } target={ '_blank' }>
                         <Icon type="github" />
                         GitHub
                     </a>
                 </Menu.Item>
-                <Menu.Item key={ KEYS.LINKEDIN }>
+                <Menu.Item
+                    key={ KEYS.LINKEDIN }
+                    onClick={ resetMenus }
+                >
                     <a href={ LINKS.LINKEDIN } target={ '_blank' }>
                         <Icon type="linkedin" />
                         LinkedIn

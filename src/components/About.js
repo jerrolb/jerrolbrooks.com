@@ -32,7 +32,9 @@ const containerStyles = {
 };
 
 window.addEventListener('resize', () => {
-    document.getElementById('aboutContainer').style.width = checkWidth();
+    if (document.getElementById('aboutContainer')) {
+        document.getElementById('aboutContainer').style.width = checkWidth();
+    }
 });
 
 const About = () => {
