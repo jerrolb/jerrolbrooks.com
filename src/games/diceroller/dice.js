@@ -107,6 +107,17 @@ class Dice extends React.Component {
         }
     }
 
+    /*
+        Firefox preventDefault does not work with arrow keys on html option tag
+        Hack to avoid bugged navigation from Mod button
+    */
+    updateValue = (index, that) => {
+        this.mod.addEventListener('change', function updateVal() {
+            that.mod.selectedIndex = index;
+            that.mod.removeEventListener('change', updateVal);
+        });
+    }
+
     handleKeyPress = (event) => {
         let currButton;
         let nextButton;
@@ -120,7 +131,9 @@ class Dice extends React.Component {
                 : null;
 
             if (currButton === this.props.buttons.length - 1) {
-                ++event.target.selectedIndex;
+                event.target.selectedIndex === 0
+                    ? ++event.target.selectedIndex
+                    : this.updateValue(event.target.selectedIndex, this);
             }
 
             return prevButton ? this[prevButton].focus() : false;
@@ -226,7 +239,6 @@ class Dice extends React.Component {
                     <option>+8</option>
                     <option>+9</option>
                     <option>+10</option>
-                    <option></option>
                 </select>
 
                 <p className="nobr">mod</p>
