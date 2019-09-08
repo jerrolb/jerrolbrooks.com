@@ -30,6 +30,11 @@ class Dice extends React.Component {
 
     componentDidMount() {
         this.d4.focus();
+        this.log.innerHTML = this.props.log;
+    }
+
+    componentDidUpdate() {
+        this.log.innerHTML = this.props.log;
     }
 
     timeStamp = () => {
@@ -157,12 +162,6 @@ class Dice extends React.Component {
         }
     }
 
-    renderLog = () => {
-        return (
-            <div dangerouslySetInnerHTML={ { __html: this.props.log } } />
-        );
-    }
-
     clearLog = () => {
         this.props.updateLog('');
         this.d4.focus();
@@ -246,9 +245,7 @@ class Dice extends React.Component {
                         id="log"
                         ref={ (elem) => this.log = elem }
                         onKeyDown={ this.handleKeyPress }
-                    >
-                        { this.renderLog() }
-                    </ul>
+                    />
                 </div>
             </div>
         );
