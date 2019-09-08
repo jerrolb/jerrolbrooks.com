@@ -155,7 +155,9 @@ class Dice extends React.Component {
             }
             if (event.target.id === 'clearLog') {
                 event.preventDefault();
-                this.log.getElementsByTagName('li')[0].focus();
+                if (this.log.getElementsByTagName('li').length) {
+                    this.log.getElementsByTagName('li')[0].focus();
+                }
                 return;
             }
 
