@@ -1,106 +1,56 @@
-var perft_leafNodes;
+let perft_leafNodes;
 
-function Perft(depth) { 	
+function Perft(depth) {
 
-	if(depth == 0) {
+    if (depth == 0) {
         perft_leafNodes++;
         return;
-    }	
-    
+    }
+
     GenerateMoves();
-    
-	var index;
-	var move;
-	
-	for(index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
-	
-		move = GameBoard.moveList[index];	
-		if(MakeMove(move) == BOOL.FALSE) {
-			continue;
-		}		
-		Perft(depth-1);
-		TakeMove();
-	}
-    
+
+    let index;
+    let move;
+
+    for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
+
+        move = GameBoard.moveList[index];
+        if (MakeMove(move) == BOOL.FALSE) {
+            continue;
+        }
+        Perft(depth - 1);
+        TakeMove();
+    }
+
     return;
 }
 
-function PerftTest(depth) {    
+function PerftTest(depth) {
 
-	PrintBoard();
-	console.log("Starting Test To Depth:" + depth);	
-	perft_leafNodes = 0;
+    PrintBoard();
+    console.log('Starting Test To Depth:' + depth);
+    perft_leafNodes = 0;
 
-	var index;
-	var move;
-	var moveNum = 0;
-	for(index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
-	
-		move = GameBoard.moveList[index];	
-		if(MakeMove(move) == BOOL.FALSE) {
-			continue;
-		}	
-		moveNum++;	
-        var cumnodes = perft_leafNodes;
-		Perft(depth-1);
-		TakeMove();
-		var oldnodes = perft_leafNodes - cumnodes;
-        console.log("move:" + moveNum + " " + PrMove(move) + " " + oldnodes);
-	}
-    
-	console.log("Test Complete : " + perft_leafNodes + " leaf nodes visited");      
+    let index;
+    let move;
+    let moveNum = 0;
+    for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
+
+        move = GameBoard.moveList[index];
+        if (MakeMove(move) == BOOL.FALSE) {
+            continue;
+        }
+        moveNum++;
+        const cumnodes = perft_leafNodes;
+        Perft(depth - 1);
+        TakeMove();
+        const oldnodes = perft_leafNodes - cumnodes;
+        console.log('move:' + moveNum + ' ' + PrMove(move) + ' ' + oldnodes);
+    }
+
+    console.log('Test Complete : ' + perft_leafNodes + ' leaf nodes visited');
 
     return;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
