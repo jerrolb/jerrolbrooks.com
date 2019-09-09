@@ -2,7 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { BOOL, COLORS, PIECES, FILES, RANKS, SQUARES, FILESBOARD, RANKSBOARD, numberOfSquaresOnBoard, fileRankToSquare } from './config/constants';
-import './chess.css';
+// import './chess.css';
 import $ from 'jquery';
 
 class Chess extends React.Component {
