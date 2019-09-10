@@ -1,11 +1,16 @@
-function GetPvLine(depth) {
+import { GameBoard } from './board';
+import { NOMOVE, PVENTRIES, BOOL } from './constants';
+import { MoveExists } from './movegen';
+import { MakeMove, TakeMove } from './makemove';
+
+export function GetPvLine(depth) {
 
     let move = ProbePvTable();
     let count = 0;
 
-    while (move != NOMOVE && count < depth) {
+    while (move !== NOMOVE && count < depth) {
 
-        if (MoveExists(move) == BOOL.TRUE) {
+        if (MoveExists(move) === BOOL.TRUE) {
             MakeMove(move);
             GameBoard.PvArray[count++] = move;
         } else {
@@ -22,18 +27,24 @@ function GetPvLine(depth) {
 
 }
 
-function ProbePvTable() {
+export function ProbePvTable() {
     const index = GameBoard.posKey % PVENTRIES;
 
-    if (GameBoard.PvTable[index].posKey == GameBoard.posKey) {
+    if (GameBoard.PvTable[index].posKey === GameBoard.posKey) {
         return GameBoard.PvTable[index].move;
     }
 
     return NOMOVE;
 }
 
-function StorePvMove(move) {
+export function StorePvMove(move) {
     const index = GameBoard.posKey % PVENTRIES;
     GameBoard.PvTable[index].posKey = GameBoard.posKey;
     GameBoard.PvTable[index].move = move;
 }
+
+// module.exports = {
+//     GetPvLine,
+//     ProbePvTable,
+//     StorePvMove
+// };

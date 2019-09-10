@@ -1,8 +1,14 @@
-function PrSq(sq) {
+import { FileChar, FilesBrd, RankChar, RanksBrd, FROMSQ, TOSQ, PROMOTED, PieceKnight } from './constants';
+import { BOOL, COLORS, PIECES, NOMOVE, PieceRookQueen, PieceBishopQueen } from './constants';
+import { GenerateMoves } from './movegen';
+import { GameBoard } from './board';
+import { MakeMove, TakeMove } from './makemove';
+
+export function PrSq(sq) {
     return (FileChar[FilesBrd[sq]] + RankChar[RanksBrd[sq]]);
 }
 
-function PrMove(move) {
+export function PrMove(move) {
     let MvStr;
 
     const ff = FilesBrd[FROMSQ(move)];
@@ -14,13 +20,13 @@ function PrMove(move) {
 
     const promoted = PROMOTED(move);
 
-    if (promoted != PIECES.EMPTY) {
+    if (promoted !== PIECES.EMPTY) {
         let pchar = 'q';
-        if (PieceKnight[promoted] == BOOL.TRUE) {
+        if (PieceKnight[promoted] === BOOL.TRUE) {
             pchar = 'n';
-        } else if (PieceRookQueen[promoted] == BOOL.TRUE && PieceBishopQueen[promoted] == BOOL.FALSE) {
+        } else if (PieceRookQueen[promoted] === BOOL.TRUE && PieceBishopQueen[promoted] === BOOL.FALSE) {
             pchar = 'r';
-        } else if (PieceRookQueen[promoted] == BOOL.FALSE && PieceBishopQueen[promoted] == BOOL.TRUE) {
+        } else if (PieceRookQueen[promoted] === BOOL.FALSE && PieceBishopQueen[promoted] === BOOL.TRUE) {
             pchar = 'b';
         }
         MvStr += pchar;
@@ -28,7 +34,7 @@ function PrMove(move) {
     return MvStr;
 }
 
-function PrintMoveList() {
+export function PrintMoveList() {
 
     let index;
     let move;
@@ -43,7 +49,7 @@ function PrintMoveList() {
     console.log('End MoveList');
 }
 
-function ParseMove(from, to) {
+export function ParseMove(from, to) {
 
     GenerateMoves();
 
@@ -51,14 +57,14 @@ function ParseMove(from, to) {
     let PromPce = PIECES.EMPTY;
     let found = BOOL.FALSE;
 
-    for (index = GameBoard.moveListStart[GameBoard.ply];
+    for (let index = GameBoard.moveListStart[GameBoard.ply];
         index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
         Move = GameBoard.moveList[index];
-        if (FROMSQ(Move) == from && TOSQ(Move) == to) {
+        if (FROMSQ(Move) === from && TOSQ(Move) === to) {
             PromPce = PROMOTED(Move);
-            if (PromPce != PIECES.EMPTY) {
-                if ((PromPce == PIECES.wQ && GameBoard.side == COLOURS.WHITE) ||
-					(PromPce == PIECES.bQ && GameBoard.side == COLOURS.BLACK)) {
+            if (PromPce !== PIECES.EMPTY) {
+                if ((PromPce === PIECES.wQ && GameBoard.side === COLORS.WHITE) ||
+                    (PromPce === PIECES.bQ && GameBoard.side === COLORS.BLACK)) {
                     found = BOOL.TRUE;
                     break;
                 }
@@ -69,8 +75,8 @@ function ParseMove(from, to) {
         }
     }
 
-    if (found != BOOL.FALSE) {
-        if (MakeMove(Move) == BOOL.FALSE) {
+    if (found !== BOOL.FALSE) {
+        if (MakeMove(Move) === BOOL.FALSE) {
             return NOMOVE;
         }
         TakeMove();
@@ -79,4 +85,11 @@ function ParseMove(from, to) {
 
     return NOMOVE;
 }
+
+// module.exports = {
+//     PrSq,
+//     PrMove,
+//     PrintMoveList,
+//     ParseMove
+// };
 

@@ -1,40 +1,33 @@
-$('#SetFen').click(function () {
-    const fenStr = $('#fenIn').val();
-    NewGame(fenStr);
-});
+import { pieceIndex, GameBoard, PrintBoard, ParseFen, SqAttacked } from './board';
+import { BOOL, COLORS, PIECES, SQUARES, FilesBrd, RanksBrd, FR2SQ, SQ120 } from './constants';
+import { NOMOVE, PieceCol, FROMSQ, TOSQ, MFLAGEP, MFLAGCA, CAPTURED, PROMOTED, Kings, UserMove, SideChar, PceChar, MAXDEPTH, GameController } from './constants';
+import {
+    PrSq,
+    ParseMove
+} from './io';
+import { MakeMove, TakeMove } from './makemove';
+import $ from 'jquery';
+import { GenerateMoves } from './movegen';
+import {
+    SearchController,
+    SearchPosition
+} from './search';
 
-$('#TakeButton').click(function () {
-    if (GameBoard.hisPly > 0) {
-        TakeMove();
-        GameBoard.ply = 0;
-        SetInitialBoardPieces();
-    }
-});
-
-$('#NewGameButton').click(function () {
-    NewGame(START_FEN);
-});
-
-function NewGame(fenStr) {
+export function newGame(fenStr) {
     ParseFen(fenStr);
     PrintBoard();
     SetInitialBoardPieces();
     CheckAndSet();
 }
 
-function ClearAllPieces() {
+export function ClearAllPieces() {
     $('.Piece').remove();
 }
 
-function SetInitialBoardPieces() {
+export function SetInitialBoardPieces() {
 
     let sq;
     let sq120;
-    let file,rank;
-    let rankName;
-    let fileName;
-    let imageString;
-    let pieceFileName;
     let pce;
 
     ClearAllPieces();
@@ -48,24 +41,24 @@ function SetInitialBoardPieces() {
     }
 }
 
-function DeSelectSq(sq) {
-    $('.Square').each(function(index) {
-        if (PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
+export function DeSelectSq(sq) {
+    $('.Square').each(function() {
+        if (PieceIsOnSq(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).removeClass('SqSelected');
         }
     });
 }
 
-function SetSqSelected(sq) {
-    $('.Square').each(function(index) {
-        if (PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
+export function SetSqSelected(sq) {
+    $('.Square').each(function() {
+        if (PieceIsOnSq(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).addClass('SqSelected');
         }
     });
 }
 
-function ClickedSquare(pageX, pageY) {
-    console.log('ClickedSquare() at ' + pageX + ',' + pageY);
+export function clickedSquare(pageX, pageY) {
+    console.log('clickedSquare() at ' + pageX + ',' + pageY);
     const position = $('#Board').position();
 
     const workedX = Math.floor(position.left);
@@ -86,37 +79,15 @@ function ClickedSquare(pageX, pageY) {
     return sq;
 }
 
-$(document).on('click','.Piece', function (e) {
-    console.log('Piece Click');
+export function makeUserMove() {
 
-    if (UserMove.from == SQUARES.NO_SQ) {
-        UserMove.from = ClickedSquare(e.pageX, e.pageY);
-    } else {
-        UserMove.to = ClickedSquare(e.pageX, e.pageY);
-    }
-
-    MakeUserMove();
-
-});
-
-$(document).on('click','.Square', function (e) {
-    console.log('Square Click');
-    if (UserMove.from != SQUARES.NO_SQ) {
-        UserMove.to = ClickedSquare(e.pageX, e.pageY);
-        MakeUserMove();
-    }
-
-});
-
-function MakeUserMove() {
-
-    if (UserMove.from != SQUARES.NO_SQ && UserMove.to != SQUARES.NO_SQ) {
+    if (UserMove.from !== SQUARES.NO_SQ && UserMove.to !== SQUARES.NO_SQ) {
 
         console.log('User Move:' + PrSq(UserMove.from) + PrSq(UserMove.to));
 
         const parsed = ParseMove(UserMove.from,UserMove.to);
 
-        if (parsed != NOMOVE) {
+        if (parsed !== NOMOVE) {
             MakeMove(parsed);
             PrintBoard();
             MoveGUIPiece(parsed);
@@ -133,10 +104,10 @@ function MakeUserMove() {
 
 }
 
-function PieceIsOnSq(sq, top, left) {
+export function PieceIsOnSq(sq, top, left) {
 
-    if ((RanksBrd[sq] == 7 - Math.round(top / 60)) &&
-		FilesBrd[sq] == Math.round(left / 60)) {
+    if ((RanksBrd[sq] === 7 - Math.round(top / 60)) &&
+        FilesBrd[sq] === Math.round(left / 60)) {
         return BOOL.TRUE;
     }
 
@@ -144,35 +115,35 @@ function PieceIsOnSq(sq, top, left) {
 
 }
 
-function RemoveGUIPiece(sq) {
+export function RemoveGUIPiece(sq) {
 
-    $('.Piece').each(function(index) {
-        if (PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
+    $('.Piece').each(function() {
+        if (PieceIsOnSq(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).remove();
         }
     });
 
 }
 
-function AddGUIPiece(sq, pce) {
+export function AddGUIPiece(sq, pce) {
 
     const file = FilesBrd[sq];
     const rank = RanksBrd[sq];
     const rankName = 'rank' + (rank + 1);
-    const	fileName = 'file' + (file + 1);
-    const pieceFileName = 'images/' + SideChar[PieceCol[pce]] + PceChar[pce].toUpperCase() + '.png';
-    const	imageString = '<image src="' + pieceFileName + '" class="Piece ' + rankName + ' ' + fileName + '"/>';
+    const fileName = 'file' + (file + 1);
+    const pieceFileName = '/images/' + SideChar[PieceCol[pce]] + PceChar[pce].toUpperCase() + '.png';
+    const imageString = '<image src="' + pieceFileName + '" class="Piece ' + rankName + ' ' + fileName + '"/>';
     $('#Board').append(imageString);
 }
 
-function MoveGUIPiece(move) {
+export function MoveGUIPiece(move) {
 
     const from = FROMSQ(move);
     const to = TOSQ(move);
 
     if (move & MFLAGEP) {
         let epRemove;
-        if (GameBoard.side == COLOURS.BLACK) {
+        if (GameBoard.side === COLORS.BLACK) {
             epRemove = to - 10;
         } else {
             epRemove = to + 10;
@@ -185,10 +156,10 @@ function MoveGUIPiece(move) {
     const file = FilesBrd[to];
     const rank = RanksBrd[to];
     const rankName = 'rank' + (rank + 1);
-    const	fileName = 'file' + (file + 1);
+    const fileName = 'file' + (file + 1);
 
-    $('.Piece').each(function(index) {
-        if (PieceIsOnSq(from, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
+    $('.Piece').each(function() {
+        if (PieceIsOnSq(from, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).removeClass();
             $(this).addClass('Piece ' + rankName + ' ' + fileName);
         }
@@ -200,6 +171,7 @@ function MoveGUIPiece(move) {
         case SQUARES.C1: RemoveGUIPiece(SQUARES.A1); AddGUIPiece(SQUARES.D1, PIECES.wR); break;
         case SQUARES.G8: RemoveGUIPiece(SQUARES.H8); AddGUIPiece(SQUARES.F8, PIECES.bR); break;
         case SQUARES.C8: RemoveGUIPiece(SQUARES.A8); AddGUIPiece(SQUARES.D8, PIECES.bR); break;
+        default: break;
         }
     } else if (PROMOTED(move)) {
         RemoveGUIPiece(to);
@@ -208,11 +180,11 @@ function MoveGUIPiece(move) {
 
 }
 
-function DrawMaterial() {
+export function DrawMaterial() {
 
-    if (GameBoard.pceNum[PIECES.wP] != 0 || GameBoard.pceNum[PIECES.bP] != 0) return BOOL.FALSE;
-    if (GameBoard.pceNum[PIECES.wQ] != 0 || GameBoard.pceNum[PIECES.bQ] != 0 ||
-					GameBoard.pceNum[PIECES.wR] != 0 || GameBoard.pceNum[PIECES.bR] != 0) return BOOL.FALSE;
+    if (GameBoard.pceNum[PIECES.wP] !== 0 || GameBoard.pceNum[PIECES.bP] !== 0) return BOOL.FALSE;
+    if (GameBoard.pceNum[PIECES.wQ] !== 0 || GameBoard.pceNum[PIECES.bQ] !== 0 ||
+                    GameBoard.pceNum[PIECES.wR] !== 0 || GameBoard.pceNum[PIECES.bR] !== 0) return BOOL.FALSE;
     if (GameBoard.pceNum[PIECES.wB] > 1 || GameBoard.pceNum[PIECES.bB] > 1) {
         return BOOL.FALSE;
     }
@@ -220,41 +192,41 @@ function DrawMaterial() {
         return BOOL.FALSE;
     }
 
-    if (GameBoard.pceNum[PIECES.wN] != 0 && GameBoard.pceNum[PIECES.wB] != 0) {
+    if (GameBoard.pceNum[PIECES.wN] !== 0 && GameBoard.pceNum[PIECES.wB] !== 0) {
         return BOOL.FALSE;
     }
-    if (GameBoard.pceNum[PIECES.bN] != 0 && GameBoard.pceNum[PIECES.bB] != 0) {
+    if (GameBoard.pceNum[PIECES.bN] !== 0 && GameBoard.pceNum[PIECES.bB] !== 0) {
         return BOOL.FALSE;
     }
 
     return BOOL.TRUE;
 }
 
-function ThreeFoldRep() {
+export function ThreeFoldRep() {
     let i = 0, r = 0;
 
     for (i = 0; i < GameBoard.hisPly; ++i) {
-        if (GameBoard.history[i].posKey == GameBoard.posKey) {
-		    r++;
+        if (GameBoard.history[i].posKey === GameBoard.posKey) {
+            r++;
         }
     }
     return r;
 }
 
-function CheckResult() {
+export function CheckResult() {
     if (GameBoard.fiftyMove >= 100) {
-		 $('#GameStatus').text('GAME DRAWN {fifty move rule}');
-		 return BOOL.TRUE;
+        $('#GameStatus').text('GAME DRAWN {fifty move rule}');
+        return BOOL.TRUE;
     }
 
     if (ThreeFoldRep() >= 2) {
-     	$('#GameStatus').text('GAME DRAWN {3-fold repetition}');
-     	return BOOL.TRUE;
+        $('#GameStatus').text('GAME DRAWN {3-fold repetition}');
+        return BOOL.TRUE;
     }
 
-    if (DrawMaterial() == BOOL.TRUE) {
-     	$('#GameStatus').text('GAME DRAWN {insufficient material to mate}');
-     	return BOOL.TRUE;
+    if (DrawMaterial() === BOOL.TRUE) {
+        $('#GameStatus').text('GAME DRAWN {insufficient material to mate}');
+        return BOOL.TRUE;
     }
 
     GenerateMoves();
@@ -264,7 +236,7 @@ function CheckResult() {
 
     for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
 
-        if (MakeMove(GameBoard.moveList[MoveNum]) == BOOL.FALSE) {
+        if (MakeMove(GameBoard.moveList[MoveNum]) === BOOL.FALSE) {
             continue;
         }
         found++;
@@ -272,17 +244,17 @@ function CheckResult() {
         break;
     }
 
-    if (found != 0) return BOOL.FALSE;
+    if (found !== 0) return BOOL.FALSE;
 
-    const InCheck = SqAttacked(GameBoard.pList[PCEINDEX(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
+    const InCheck = SqAttacked(GameBoard.pList[pieceIndex(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
 
-    if (InCheck == BOOL.TRUE) {
-        if (GameBoard.side == COLOURS.WHITE) {
-	      $('#GameStatus').text('GAME OVER {black mates}');
-	      return BOOL.TRUE;
+    if (InCheck === BOOL.TRUE) {
+        if (GameBoard.side === COLORS.WHITE) {
+            $('#GameStatus').text('GAME OVER {black mates}');
+            return BOOL.TRUE;
         } else {
-	      $('#GameStatus').text('GAME OVER {white mates}');
-	      return BOOL.TRUE;
+            $('#GameStatus').text('GAME OVER {white mates}');
+            return BOOL.TRUE;
         }
     } else {
         $('#GameStatus').text('GAME DRAWN {stalemate}');return BOOL.TRUE;
@@ -291,8 +263,8 @@ function CheckResult() {
     return BOOL.FALSE;
 }
 
-function CheckAndSet() {
-    if (CheckResult() == BOOL.TRUE) {
+export function CheckAndSet() {
+    if (CheckResult() === BOOL.TRUE) {
         GameController.GameOver = BOOL.TRUE;
     } else {
         GameController.GameOver = BOOL.FALSE;
@@ -300,8 +272,8 @@ function CheckAndSet() {
     }
 }
 
-function PreSearch() {
-    if (GameController.GameOver == BOOL.FALSE) {
+export function PreSearch() {
+    if (GameController.GameOver === BOOL.FALSE) {
         SearchController.thinking = BOOL.TRUE;
         setTimeout(function() {
             StartSearch();
@@ -309,15 +281,9 @@ function PreSearch() {
     }
 }
 
-$('#SearchButton').click(function () {
-    GameController.PlayerSide = GameController.side ^ 1;
-    PreSearch();
-});
-
-function StartSearch() {
+export function StartSearch() {
 
     SearchController.depth = MAXDEPTH;
-    const t = $.now();
     const tt = $('#ThinkTimeChoice').val();
 
     SearchController.time = parseInt(tt) * 1000;
@@ -328,3 +294,22 @@ function StartSearch() {
     CheckAndSet();
 }
 
+// module.exports = {
+//     newGame,
+//     ClearAllPieces,
+//     SetInitialBoardPieces,
+//     DeSelectSq,
+//     SetSqSelected,
+//     clickedSquare,
+//     makeUserMove,
+//     PieceIsOnSq,
+//     RemoveGUIPiece,
+//     AddGUIPiece,
+//     MoveGUIPiece,
+//     DrawMaterial,
+//     ThreeFoldRep,
+//     CheckResult,
+//     CheckAndSet,
+//     PreSearch,
+//     StartSearch
+// };

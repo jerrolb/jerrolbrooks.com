@@ -22,6 +22,7 @@ export const LINKS = {
     REACT: 'https://reactjs.org/',
     REDUX: 'https://redux.js.org/',
     ANTD: 'https://ant.design/',
+    BLUEFEVER: 'https://www.youtube.com/user/BlueFeverSoft/',
     API: {
         HELLO: 'https://jerrolbrooks.com/api/hello',
         TEXTQUERY_PASS: 'https://jerrolbrooks.com/api/textQuery?text=Some text',
@@ -31,7 +32,8 @@ export const LINKS = {
 
 export const KEYS = {
     GITHUB: 'GitHub',
-    LINKEDIN: 'LinkedIn'
+    LINKEDIN: 'LinkedIn',
+    BLUEFEVER: 'Bluefever'
 };
 
 export const WIDTHS = {

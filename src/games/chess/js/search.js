@@ -1,16 +1,33 @@
-const SearchController = {};
+import { pieceIndex, GameBoard, SqAttacked } from './board';
+import { BOOL, BRD_SQ_NUM } from './constants';
+import { NOMOVE, PVENTRIES, FROMSQ, TOSQ, Kings, MAXDEPTH, MFLAGCAP, MATE, INFINITE } from './constants';
+import {
+    PrMove } from './io';
+import { MakeMove, TakeMove } from './makemove';
+import $ from 'jquery';
+import { GenerateMoves, generateCaptures } from './movegen';
+import {
+    evalPosition
+} from './evaluate';
+import {
+    GetPvLine,
+    ProbePvTable,
+    StorePvMove
+} from './pvtable';
 
-SearchController.nodes;
-SearchController.fh;
-SearchController.fhf;
-SearchController.depth;
-SearchController.time;
-SearchController.start;
-SearchController.stop;
-SearchController.best;
-SearchController.thinking;
+export const SearchController = {
+    nodes: undefined,
+    fh: undefined,
+    fhf: undefined,
+    depth: undefined,
+    time: undefined,
+    start: undefined,
+    stop: undefined,
+    best: undefined,
+    thinking: undefined
+};
 
-function PickNextMove(MoveNum) {
+export function PickNextMove(MoveNum) {
 
     let index = 0;
     let bestScore = -1;
@@ -23,7 +40,7 @@ function PickNextMove(MoveNum) {
         }
     }
 
-    if (bestNum != MoveNum) {
+    if (bestNum !== MoveNum) {
         let temp = 0;
         temp = GameBoard.moveScores[MoveNum];
         GameBoard.moveScores[MoveNum] = GameBoard.moveScores[bestNum];
@@ -36,25 +53,25 @@ function PickNextMove(MoveNum) {
 
 }
 
-function ClearPvTable() {
+export function ClearPvTable() {
 
-    for (index = 0; index < PVENTRIES; index++) {
+    for (let index = 0; index < PVENTRIES; index++) {
         GameBoard.PvTable[index].move = NOMOVE;
         GameBoard.PvTable[index].posKey = 0;
     }
 }
 
-function CheckUp() {
+export function CheckUp() {
     if (($.now() - SearchController.start) > SearchController.time) {
         SearchController.stop = BOOL.TRUE;
     }
 }
 
-function IsRepetition() {
+export function IsRepetition() {
     let index = 0;
 
     for (index = GameBoard.hisPly - GameBoard.fiftyMove; index < GameBoard.hisPly - 1; ++index) {
-        if (GameBoard.posKey == GameBoard.history[index].posKey) {
+        if (GameBoard.posKey === GameBoard.history[index].posKey) {
             return BOOL.TRUE;
         }
     }
@@ -62,23 +79,23 @@ function IsRepetition() {
     return BOOL.FALSE;
 }
 
-function Quiescence(alpha, beta) {
+export function Quiescence(alpha, beta) {
 
-    if ((SearchController.nodes & 2047) == 0) {
+    if ((SearchController.nodes & 2047) === 0) {
         CheckUp();
     }
 
     SearchController.nodes++;
 
-    if ((IsRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply != 0) {
+    if ((IsRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply !== 0) {
         return 0;
     }
 
     if (GameBoard.ply > MAXDEPTH - 1) {
-        return EvalPosition();
+        return evalPosition();
     }
 
-    let Score = EvalPosition();
+    let Score = evalPosition();
 
     if (Score >= beta) {
         return beta;
@@ -88,7 +105,7 @@ function Quiescence(alpha, beta) {
         alpha = Score;
     }
 
-    GenerateCaptures();
+    generateCaptures();
 
     let MoveNum = 0;
     let Legal = 0;
@@ -102,7 +119,7 @@ function Quiescence(alpha, beta) {
 
         Move = GameBoard.moveList[MoveNum];
 
-        if (MakeMove(Move) == BOOL.FALSE) {
+        if (MakeMove(Move) === BOOL.FALSE) {
             continue;
         }
         Legal++;
@@ -110,13 +127,13 @@ function Quiescence(alpha, beta) {
 
         TakeMove();
 
-        if (SearchController.stop == BOOL.TRUE) {
+        if (SearchController.stop === BOOL.TRUE) {
             return 0;
         }
 
         if (Score > alpha) {
             if (Score >= beta) {
-                if (Legal == 1) {
+                if (Legal === 1) {
                     SearchController.fhf++;
                 }
                 SearchController.fh++;
@@ -127,7 +144,7 @@ function Quiescence(alpha, beta) {
         }
     }
 
-    if (alpha != OldAlpha) {
+    if (alpha !== OldAlpha) {
         StorePvMove(BestMove);
     }
 
@@ -135,28 +152,28 @@ function Quiescence(alpha, beta) {
 
 }
 
-function AlphaBeta(alpha, beta, depth) {
+export function AlphaBeta(alpha, beta, depth) {
 
     if (depth <= 0) {
         return Quiescence(alpha, beta);
     }
 
-    if ((SearchController.nodes & 2047) == 0) {
+    if ((SearchController.nodes & 2047) === 0) {
         CheckUp();
     }
 
     SearchController.nodes++;
 
-    if ((IsRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply != 0) {
+    if ((IsRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply !== 0) {
         return 0;
     }
 
     if (GameBoard.ply > MAXDEPTH - 1) {
-        return EvalPosition();
+        return evalPosition();
     }
 
-    const InCheck = SqAttacked(GameBoard.pList[PCEINDEX(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
-    if (InCheck == BOOL.TRUE) {
+    const InCheck = SqAttacked(GameBoard.pList[pieceIndex(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
+    if (InCheck === BOOL.TRUE) {
         depth++;
     }
 
@@ -171,9 +188,9 @@ function AlphaBeta(alpha, beta, depth) {
     let Move = NOMOVE;
 
     const PvMove = ProbePvTable();
-    if (PvMove != NOMOVE) {
+    if (PvMove !== NOMOVE) {
         for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
-            if (GameBoard.moveList[MoveNum] == PvMove) {
+            if (GameBoard.moveList[MoveNum] === PvMove) {
                 GameBoard.moveScores[MoveNum] = 2000000;
                 break;
             }
@@ -186,7 +203,7 @@ function AlphaBeta(alpha, beta, depth) {
 
         Move = GameBoard.moveList[MoveNum];
 
-        if (MakeMove(Move) == BOOL.FALSE) {
+        if (MakeMove(Move) === BOOL.FALSE) {
             continue;
         }
         Legal++;
@@ -194,57 +211,55 @@ function AlphaBeta(alpha, beta, depth) {
 
         TakeMove();
 
-        if (SearchController.stop == BOOL.TRUE) {
+        if (SearchController.stop === BOOL.TRUE) {
             return 0;
         }
 
         if (Score > alpha) {
             if (Score >= beta) {
-                if (Legal == 1) {
+                if (Legal === 1) {
                     SearchController.fhf++;
                 }
                 SearchController.fh++;
-                if ((Move & MFLAGCAP) == 0) {
+                if ((Move & MFLAGCAP) === 0) {
                     GameBoard.searchKillers[MAXDEPTH + GameBoard.ply] =
-						GameBoard.searchKillers[GameBoard.ply];
+                        GameBoard.searchKillers[GameBoard.ply];
                     GameBoard.searchKillers[GameBoard.ply] = Move;
                 }
                 return beta;
             }
-            if ((Move & MFLAGCAP) == 0) {
+            if ((Move & MFLAGCAP) === 0) {
                 GameBoard.searchHistory[GameBoard.pieces[FROMSQ(Move)] * BRD_SQ_NUM + TOSQ(Move)]
-						 += depth * depth;
+                         += depth * depth;
             }
             alpha = Score;
             BestMove = Move;
         }
     }
 
-    if (Legal == 0) {
-        if (InCheck == BOOL.TRUE) {
+    if (Legal === 0) {
+        if (InCheck === BOOL.TRUE) {
             return -MATE + GameBoard.ply;
         } else {
             return 0;
         }
     }
 
-    if (alpha != OldAlpha) {
+    if (alpha !== OldAlpha) {
         StorePvMove(BestMove);
     }
 
     return alpha;
 }
 
-function ClearForSearch() {
+export function ClearForSearch() {
 
-    let index = 0;
-    const index2 = 0;
 
-    for (index = 0; index < 14 * BRD_SQ_NUM; ++index) {
+    for (let index = 0; index < 14 * BRD_SQ_NUM; ++index) {
         GameBoard.searchHistory[index] = 0;
     }
 
-    for (index = 0; index < 3 * MAXDEPTH; ++index) {
+    for (let index = 0; index < 3 * MAXDEPTH; ++index) {
         GameBoard.searchKillers[index] = 0;
     }
 
@@ -257,7 +272,7 @@ function ClearForSearch() {
     SearchController.stop = BOOL.FALSE;
 }
 
-function SearchPosition() {
+export function SearchPosition() {
 
     let bestMove = NOMOVE;
     let bestScore = -INFINITE;
@@ -272,21 +287,21 @@ function SearchPosition() {
 
         Score = AlphaBeta(-INFINITE, INFINITE, currentDepth);
 
-        if (SearchController.stop == BOOL.TRUE) {
+        if (SearchController.stop === BOOL.TRUE) {
             break;
         }
 
         bestScore = Score;
         bestMove = ProbePvTable();
         line = 'D:' + currentDepth + ' Best:' + PrMove(bestMove) + ' Score:' + bestScore +
-				' nodes:' + SearchController.nodes;
+                ' nodes:' + SearchController.nodes;
 
         PvNum = GetPvLine(currentDepth);
         line += ' Pv:';
         for (c = 0; c < PvNum; ++c) {
             line += ' ' + PrMove(GameBoard.PvArray[c]);
         }
-        if (currentDepth != 1) {
+        if (currentDepth !== 1) {
             line += (' Ordering:' + ((SearchController.fhf / SearchController.fh) * 100).toFixed(2) + '%');
         }
         console.log(line);
@@ -298,7 +313,7 @@ function SearchPosition() {
     UpdateDOMStats(bestScore, currentDepth);
 }
 
-function UpdateDOMStats(dom_score, dom_depth) {
+export function UpdateDOMStats(dom_score, dom_depth) {
 
     let scoreText = 'Score: ' + (dom_score / 100).toFixed(2);
     if (Math.abs(dom_score) > MATE - MAXDEPTH) {
@@ -313,3 +328,15 @@ function UpdateDOMStats(dom_score, dom_depth) {
     $('#BestOut').text('BestMove: ' + PrMove(SearchController.best));
 }
 
+// module.exports = {
+//     PickNextMove,
+//     ClearPvTable,
+//     CheckUp,
+//     IsRepetition,
+//     Quiescence,
+//     AlphaBeta,
+//     ClearForSearch,
+//     UpdateDOMStats,
+//     SearchPosition,
+//     SearchController
+// };

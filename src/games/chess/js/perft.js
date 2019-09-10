@@ -2,7 +2,7 @@ let perft_leafNodes;
 
 function Perft(depth) {
 
-    if (depth == 0) {
+    if (depth === 0) {
         perft_leafNodes++;
         return;
     }
@@ -15,7 +15,7 @@ function Perft(depth) {
     for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
 
         move = GameBoard.moveList[index];
-        if (MakeMove(move) == BOOL.FALSE) {
+        if (MakeMove(move) === BOOL.FALSE) {
             continue;
         }
         Perft(depth - 1);
@@ -37,7 +37,7 @@ function PerftTest(depth) {
     for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
 
         move = GameBoard.moveList[index];
-        if (MakeMove(move) == BOOL.FALSE) {
+        if (MakeMove(move) === BOOL.FALSE) {
             continue;
         }
         moveNum++;
