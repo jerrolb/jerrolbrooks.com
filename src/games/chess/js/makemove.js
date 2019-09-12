@@ -1,47 +1,47 @@
-import { BOOL, COLORS, PIECES, PieceCol, SQUARES, PieceVal, HASH_PCE, FROMSQ, TOSQ, HASH_CA, HASH_EP, HASH_SIDE, MFLAGEP, MFLAGCA, CastlePerm, CAPTURED, PiecePawn, MFLAGPS, PROMOTED, Kings } from './constants';
-import { GameBoard, pieceIndex, SqAttacked } from './board';
+import { BOOL, COLORS, PIECES, pieceColor, SQUARES, pieceValue, hashPiece, fromSquare, toSquare, hashCastle, hashEnPassant, hashSide, MFLAGEP, MFLAGCA, CastlePerm, captured, isPawn, MFLAGPS, promoted, Kings } from './constants';
+import { GameBoard, pieceIndex, squareAttacked } from './board';
 
-export function ClearPiece(sq) {
+function clearPiece(sq) {
     const pce = GameBoard.pieces[sq];
-    const col = PieceCol[pce];
+    const col = pieceColor[pce];
     let index;
-    let t_pceNum = -1;
+    let tPieceNum = -1;
 
-    HASH_PCE(pce, sq);
+    hashPiece(pce, sq);
 
     GameBoard.pieces[sq] = PIECES.EMPTY;
-    GameBoard.material[col] -= PieceVal[pce];
+    GameBoard.material[col] -= pieceValue[pce];
 
     for (index = 0; index < GameBoard.pceNum[pce]; ++index) {
         if (GameBoard.pList[pieceIndex(pce,index)] === sq) {
-            t_pceNum = index;
+            tPieceNum = index;
             break;
         }
     }
 
     GameBoard.pceNum[pce]--;
-    GameBoard.pList[pieceIndex(pce, t_pceNum)] = GameBoard.pList[pieceIndex(pce, GameBoard.pceNum[pce])];
+    GameBoard.pList[pieceIndex(pce, tPieceNum)] = GameBoard.pList[pieceIndex(pce, GameBoard.pceNum[pce])];
 }
 
-export function AddPiece(sq, pce) {
-    const col = PieceCol[pce];
+function addPiece(sq, pce) {
+    const col = pieceColor[pce];
 
-    HASH_PCE(pce, sq);
+    hashPiece(pce, sq);
 
     GameBoard.pieces[sq] = pce;
-    GameBoard.material[col] += PieceVal[pce];
+    GameBoard.material[col] += pieceValue[pce];
     GameBoard.pList[pieceIndex(pce, GameBoard.pceNum[pce])] = sq;
     GameBoard.pceNum[pce]++;
 }
 
-export function MovePiece(from, to) {
+function movePiece(from, to) {
     let index = 0;
     const pce = GameBoard.pieces[from];
 
-    HASH_PCE(pce, from);
+    hashPiece(pce, from);
     GameBoard.pieces[from] = PIECES.EMPTY;
 
-    HASH_PCE(pce,to);
+    hashPiece(pce,to);
     GameBoard.pieces[to] = pce;
 
     for (index = 0; index < GameBoard.pceNum[pce]; ++index) {
@@ -52,39 +52,39 @@ export function MovePiece(from, to) {
     }
 }
 
-export function MakeMove(move) {
-    const from = FROMSQ(move);
-    const to = TOSQ(move);
+function makeMove(move) {
+    const from = fromSquare(move);
+    const to = toSquare(move);
     const side = GameBoard.side;
 
     GameBoard.history[GameBoard.hisPly].posKey = GameBoard.posKey;
 
     if ((move & MFLAGEP) !== 0) {
         if (side === COLORS.WHITE) {
-            ClearPiece(to - 10);
+            clearPiece(to - 10);
         } else {
-            ClearPiece(to + 10);
+            clearPiece(to + 10);
         }
     } else if ((move & MFLAGCA) !== 0) {
         switch (to) {
         case SQUARES.C1:
-            MovePiece(SQUARES.A1, SQUARES.D1);
+            movePiece(SQUARES.A1, SQUARES.D1);
             break;
         case SQUARES.C8:
-            MovePiece(SQUARES.A8, SQUARES.D8);
+            movePiece(SQUARES.A8, SQUARES.D8);
             break;
         case SQUARES.G1:
-            MovePiece(SQUARES.H1, SQUARES.F1);
+            movePiece(SQUARES.H1, SQUARES.F1);
             break;
         case SQUARES.G8:
-            MovePiece(SQUARES.H8, SQUARES.F8);
+            movePiece(SQUARES.H8, SQUARES.F8);
             break;
         default: break;
         }
     }
 
-    if (GameBoard.enPas !== SQUARES.NO_SQ) HASH_EP();
-    HASH_CA();
+    if (GameBoard.enPas !== SQUARES.NO_SQ) hashEnPassant();
+    hashCastle();
 
     GameBoard.history[GameBoard.hisPly].move = move;
     GameBoard.history[GameBoard.hisPly].fiftyMove = GameBoard.fiftyMove;
@@ -95,20 +95,20 @@ export function MakeMove(move) {
     GameBoard.castlePerm &= CastlePerm[to];
     GameBoard.enPas = SQUARES.NO_SQ;
 
-    HASH_CA();
+    hashCastle();
 
-    const captured = CAPTURED(move);
+    const isCaptured = captured(move);
     GameBoard.fiftyMove++;
 
-    if (captured !== PIECES.EMPTY) {
-        ClearPiece(to);
+    if (isCaptured !== PIECES.EMPTY) {
+        clearPiece(to);
         GameBoard.fiftyMove = 0;
     }
 
     GameBoard.hisPly++;
     GameBoard.ply++;
 
-    if (PiecePawn[GameBoard.pieces[from]] === BOOL.TRUE) {
+    if (isPawn[GameBoard.pieces[from]] === BOOL.TRUE) {
         GameBoard.fiftyMove = 0;
         if ((move & MFLAGPS) !== 0) {
             if (side === COLORS.WHITE) {
@@ -116,75 +116,83 @@ export function MakeMove(move) {
             } else {
                 GameBoard.enPas = from - 10;
             }
-            HASH_EP();
+            hashEnPassant();
         }
     }
 
-    MovePiece(from, to);
+    movePiece(from, to);
 
-    const prPce = PROMOTED(move);
+    const prPce = promoted(move);
     if (prPce !== PIECES.EMPTY) {
-        ClearPiece(to);
-        AddPiece(to, prPce);
+        clearPiece(to);
+        addPiece(to, prPce);
     }
 
     GameBoard.side ^= 1;
-    HASH_SIDE();
+    hashSide();
 
-    if (SqAttacked(GameBoard.pList[pieceIndex(Kings[side],0)], GameBoard.side)) {
-        TakeMove();
+    if (squareAttacked(GameBoard.pList[pieceIndex(Kings[side],0)], GameBoard.side)) {
+        takeMove();
         return BOOL.FALSE;
     }
 
     return BOOL.TRUE;
 }
 
-export function TakeMove() {
+function takeMove() {
     GameBoard.hisPly--;
     GameBoard.ply--;
 
     const move = GameBoard.history[GameBoard.hisPly].move;
-    const from = FROMSQ(move);
-    const to = TOSQ(move);
+    const from = fromSquare(move);
+    const to = toSquare(move);
 
-    if (GameBoard.enPas !== SQUARES.NO_SQ) HASH_EP();
-    HASH_CA();
+    if (GameBoard.enPas !== SQUARES.NO_SQ) hashEnPassant();
+    hashCastle();
 
     GameBoard.castlePerm = GameBoard.history[GameBoard.hisPly].castlePerm;
     GameBoard.fiftyMove = GameBoard.history[GameBoard.hisPly].fiftyMove;
     GameBoard.enPas = GameBoard.history[GameBoard.hisPly].enPas;
 
-    if (GameBoard.enPas !== SQUARES.NO_SQ) HASH_EP();
-    HASH_CA();
+    if (GameBoard.enPas !== SQUARES.NO_SQ) hashEnPassant();
+    hashCastle();
 
     GameBoard.side ^= 1;
-    HASH_SIDE();
+    hashSide();
 
     if ((MFLAGEP & move) !== 0) {
         if (GameBoard.side === COLORS.WHITE) {
-            AddPiece(to - 10, PIECES.bP);
+            addPiece(to - 10, PIECES.bP);
         } else {
-            AddPiece(to + 10, PIECES.wP);
+            addPiece(to + 10, PIECES.wP);
         }
     } else if ((MFLAGCA & move) !== 0) {
         switch (to) {
-        case SQUARES.C1: MovePiece(SQUARES.D1, SQUARES.A1); break;
-        case SQUARES.C8: MovePiece(SQUARES.D8, SQUARES.A8); break;
-        case SQUARES.G1: MovePiece(SQUARES.F1, SQUARES.H1); break;
-        case SQUARES.G8: MovePiece(SQUARES.F8, SQUARES.H8); break;
+        case SQUARES.C1: movePiece(SQUARES.D1, SQUARES.A1); break;
+        case SQUARES.C8: movePiece(SQUARES.D8, SQUARES.A8); break;
+        case SQUARES.G1: movePiece(SQUARES.F1, SQUARES.H1); break;
+        case SQUARES.G8: movePiece(SQUARES.F8, SQUARES.H8); break;
         default: break;
         }
     }
 
-    MovePiece(to, from);
+    movePiece(to, from);
 
-    const captured = CAPTURED(move);
-    if (captured !== PIECES.EMPTY) {
-        AddPiece(to, captured);
+    const isCaptured = captured(move);
+    if (isCaptured !== PIECES.EMPTY) {
+        addPiece(to, isCaptured);
     }
 
-    if (PROMOTED(move) !== PIECES.EMPTY) {
-        ClearPiece(from);
-        AddPiece(from, (PieceCol[PROMOTED(move)] === COLORS.WHITE ? PIECES.wP : PIECES.bP));
+    if (promoted(move) !== PIECES.EMPTY) {
+        clearPiece(from);
+        addPiece(from, (pieceColor[promoted(move)] === COLORS.WHITE ? PIECES.wP : PIECES.bP));
     }
 }
+
+export {
+    clearPiece,
+    addPiece,
+    movePiece,
+    makeMove,
+    takeMove
+};

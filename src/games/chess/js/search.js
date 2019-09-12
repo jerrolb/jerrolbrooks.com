@@ -1,21 +1,14 @@
-import { pieceIndex, GameBoard, SqAttacked } from './board';
-import { BOOL, BRD_SQ_NUM } from './constants';
-import { NOMOVE, PVENTRIES, FROMSQ, TOSQ, Kings, MAXDEPTH, MFLAGCAP, MATE, INFINITE } from './constants';
-import {
-    PrMove } from './io';
-import { MakeMove, TakeMove } from './makemove';
+import { pieceIndex, GameBoard, squareAttacked } from './board';
+import { BOOL, numOfBoardSquares } from './constants';
+import { noMove, PVENTRIES, fromSquare, toSquare, Kings, MAXDEPTH, MFLAGCAP, MATE, INFINITE } from './constants';
+import { prMove } from './io';
+import { makeMove, takeMove } from './makemove';
+import { generateMoves, generateCaptures } from './movegen';
+import { evalPosition } from './evaluate';
+import { getPvLine, probePvTable, storePvMove } from './pvtable';
 import $ from 'jquery';
-import { GenerateMoves, generateCaptures } from './movegen';
-import {
-    evalPosition
-} from './evaluate';
-import {
-    GetPvLine,
-    ProbePvTable,
-    StorePvMove
-} from './pvtable';
 
-export const SearchController = {
+const SearchController = {
     nodes: undefined,
     fh: undefined,
     fhf: undefined,
@@ -27,7 +20,7 @@ export const SearchController = {
     thinking: undefined
 };
 
-export function PickNextMove(MoveNum) {
+function pickNextMove(MoveNum) {
 
     let index = 0;
     let bestScore = -1;
@@ -53,21 +46,21 @@ export function PickNextMove(MoveNum) {
 
 }
 
-export function ClearPvTable() {
+function clearPvTable() {
 
     for (let index = 0; index < PVENTRIES; index++) {
-        GameBoard.PvTable[index].move = NOMOVE;
+        GameBoard.PvTable[index].move = noMove;
         GameBoard.PvTable[index].posKey = 0;
     }
 }
 
-export function CheckUp() {
+function checkUp() {
     if (($.now() - SearchController.start) > SearchController.time) {
         SearchController.stop = BOOL.TRUE;
     }
 }
 
-export function IsRepetition() {
+function isRepetition() {
     let index = 0;
 
     for (index = GameBoard.hisPly - GameBoard.fiftyMove; index < GameBoard.hisPly - 1; ++index) {
@@ -79,15 +72,15 @@ export function IsRepetition() {
     return BOOL.FALSE;
 }
 
-export function Quiescence(alpha, beta) {
+function quiescence(alpha, beta) {
 
     if ((SearchController.nodes & 2047) === 0) {
-        CheckUp();
+        checkUp();
     }
 
     SearchController.nodes++;
 
-    if ((IsRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply !== 0) {
+    if ((isRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply !== 0) {
         return 0;
     }
 
@@ -110,22 +103,22 @@ export function Quiescence(alpha, beta) {
     let MoveNum = 0;
     let Legal = 0;
     const OldAlpha = alpha;
-    let BestMove = NOMOVE;
-    let Move = NOMOVE;
+    let BestMove = noMove;
+    let Move = noMove;
 
     for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
 
-        PickNextMove(MoveNum);
+        pickNextMove(MoveNum);
 
         Move = GameBoard.moveList[MoveNum];
 
-        if (MakeMove(Move) === BOOL.FALSE) {
+        if (makeMove(Move) === BOOL.FALSE) {
             continue;
         }
         Legal++;
-        Score = -Quiescence(-beta, -alpha);
+        Score = -quiescence(-beta, -alpha);
 
-        TakeMove();
+        takeMove();
 
         if (SearchController.stop === BOOL.TRUE) {
             return 0;
@@ -145,26 +138,26 @@ export function Quiescence(alpha, beta) {
     }
 
     if (alpha !== OldAlpha) {
-        StorePvMove(BestMove);
+        storePvMove(BestMove);
     }
 
     return alpha;
 
 }
 
-export function AlphaBeta(alpha, beta, depth) {
+function alphaBeta(alpha, beta, depth) {
 
     if (depth <= 0) {
-        return Quiescence(alpha, beta);
+        return quiescence(alpha, beta);
     }
 
     if ((SearchController.nodes & 2047) === 0) {
-        CheckUp();
+        checkUp();
     }
 
     SearchController.nodes++;
 
-    if ((IsRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply !== 0) {
+    if ((isRepetition() || GameBoard.fiftyMove >= 100) && GameBoard.ply !== 0) {
         return 0;
     }
 
@@ -172,23 +165,23 @@ export function AlphaBeta(alpha, beta, depth) {
         return evalPosition();
     }
 
-    const InCheck = SqAttacked(GameBoard.pList[pieceIndex(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
+    const InCheck = squareAttacked(GameBoard.pList[pieceIndex(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
     if (InCheck === BOOL.TRUE) {
         depth++;
     }
 
     let Score = -INFINITE;
 
-    GenerateMoves();
+    generateMoves();
 
     let MoveNum = 0;
     let Legal = 0;
     const OldAlpha = alpha;
-    let BestMove = NOMOVE;
-    let Move = NOMOVE;
+    let BestMove = noMove;
+    let Move = noMove;
 
-    const PvMove = ProbePvTable();
-    if (PvMove !== NOMOVE) {
+    const PvMove = probePvTable();
+    if (PvMove !== noMove) {
         for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
             if (GameBoard.moveList[MoveNum] === PvMove) {
                 GameBoard.moveScores[MoveNum] = 2000000;
@@ -199,17 +192,17 @@ export function AlphaBeta(alpha, beta, depth) {
 
     for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
 
-        PickNextMove(MoveNum);
+        pickNextMove(MoveNum);
 
         Move = GameBoard.moveList[MoveNum];
 
-        if (MakeMove(Move) === BOOL.FALSE) {
+        if (makeMove(Move) === BOOL.FALSE) {
             continue;
         }
         Legal++;
-        Score = -AlphaBeta(-beta, -alpha, depth - 1);
+        Score = -alphaBeta(-beta, -alpha, depth - 1);
 
-        TakeMove();
+        takeMove();
 
         if (SearchController.stop === BOOL.TRUE) {
             return 0;
@@ -229,7 +222,7 @@ export function AlphaBeta(alpha, beta, depth) {
                 return beta;
             }
             if ((Move & MFLAGCAP) === 0) {
-                GameBoard.searchHistory[GameBoard.pieces[FROMSQ(Move)] * BRD_SQ_NUM + TOSQ(Move)]
+                GameBoard.searchHistory[GameBoard.pieces[fromSquare(Move)] * numOfBoardSquares + toSquare(Move)]
                          += depth * depth;
             }
             alpha = Score;
@@ -246,16 +239,14 @@ export function AlphaBeta(alpha, beta, depth) {
     }
 
     if (alpha !== OldAlpha) {
-        StorePvMove(BestMove);
+        storePvMove(BestMove);
     }
 
     return alpha;
 }
 
-export function ClearForSearch() {
-
-
-    for (let index = 0; index < 14 * BRD_SQ_NUM; ++index) {
+function clearForSearch() {
+    for (let index = 0; index < 14 * numOfBoardSquares; ++index) {
         GameBoard.searchHistory[index] = 0;
     }
 
@@ -263,7 +254,7 @@ export function ClearForSearch() {
         GameBoard.searchKillers[index] = 0;
     }
 
-    ClearPvTable();
+    clearPvTable();
     GameBoard.ply = 0;
     SearchController.nodes = 0;
     SearchController.fh = 0;
@@ -272,34 +263,34 @@ export function ClearForSearch() {
     SearchController.stop = BOOL.FALSE;
 }
 
-export function SearchPosition() {
+function searchPosition() {
 
-    let bestMove = NOMOVE;
+    let bestMove = noMove;
     let bestScore = -INFINITE;
     let Score = -INFINITE;
     let currentDepth = 0;
     let line;
     let PvNum;
     let c;
-    ClearForSearch();
+    clearForSearch();
 
     for (currentDepth = 1; currentDepth <= SearchController.depth; ++currentDepth) {
 
-        Score = AlphaBeta(-INFINITE, INFINITE, currentDepth);
+        Score = alphaBeta(-INFINITE, INFINITE, currentDepth);
 
         if (SearchController.stop === BOOL.TRUE) {
             break;
         }
 
         bestScore = Score;
-        bestMove = ProbePvTable();
-        line = 'D:' + currentDepth + ' Best:' + PrMove(bestMove) + ' Score:' + bestScore +
+        bestMove = probePvTable();
+        line = 'D:' + currentDepth + ' Best:' + prMove(bestMove) + ' Score:' + bestScore +
                 ' nodes:' + SearchController.nodes;
 
-        PvNum = GetPvLine(currentDepth);
+        PvNum = getPvLine(currentDepth);
         line += ' Pv:';
         for (c = 0; c < PvNum; ++c) {
-            line += ' ' + PrMove(GameBoard.PvArray[c]);
+            line += ' ' + prMove(GameBoard.PvArray[c]);
         }
         if (currentDepth !== 1) {
             line += (' Ordering:' + ((SearchController.fhf / SearchController.fh) * 100).toFixed(2) + '%');
@@ -310,33 +301,33 @@ export function SearchPosition() {
 
     SearchController.best = bestMove;
     SearchController.thinking = BOOL.FALSE;
-    UpdateDOMStats(bestScore, currentDepth);
+    updateDOMStats(bestScore, currentDepth);
 }
 
-export function UpdateDOMStats(dom_score, dom_depth) {
+function updateDOMStats(domScore, domDepth) {
 
-    let scoreText = 'Score: ' + (dom_score / 100).toFixed(2);
-    if (Math.abs(dom_score) > MATE - MAXDEPTH) {
-        scoreText = 'Score: Mate In ' + (MATE - (Math.abs(dom_score)) - 1) + ' moves';
+    let scoreText = 'Score: ' + (domScore / 100).toFixed(2);
+    if (Math.abs(domScore) > MATE - MAXDEPTH) {
+        scoreText = 'Score: Mate In ' + (MATE - (Math.abs(domScore)) - 1) + ' moves';
     }
 
     $('#OrderingOut').text('Ordering: ' + ((SearchController.fhf / SearchController.fh) * 100).toFixed(2) + '%');
-    $('#DepthOut').text('Depth: ' + dom_depth);
+    $('#DepthOut').text('Depth: ' + domDepth);
     $('#ScoreOut').text(scoreText);
     $('#NodesOut').text('Nodes: ' + SearchController.nodes);
     $('#TimeOut').text('Time: ' + (($.now() - SearchController.start) / 1000).toFixed(1) + 's');
-    $('#BestOut').text('BestMove: ' + PrMove(SearchController.best));
+    $('#BestOut').text('BestMove: ' + prMove(SearchController.best));
 }
 
-// module.exports = {
-//     PickNextMove,
-//     ClearPvTable,
-//     CheckUp,
-//     IsRepetition,
-//     Quiescence,
-//     AlphaBeta,
-//     ClearForSearch,
-//     UpdateDOMStats,
-//     SearchPosition,
-//     SearchController
-// };
+export {
+    pickNextMove,
+    clearPvTable,
+    checkUp,
+    isRepetition,
+    quiescence,
+    alphaBeta,
+    clearForSearch,
+    updateDOMStats,
+    searchPosition,
+    SearchController
+};

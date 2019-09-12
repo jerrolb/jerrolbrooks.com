@@ -1,32 +1,32 @@
-import { FileChar, FilesBrd, RankChar, RanksBrd, FROMSQ, TOSQ, PROMOTED, PieceKnight } from './constants';
-import { BOOL, COLORS, PIECES, NOMOVE, PieceRookQueen, PieceBishopQueen } from './constants';
-import { GenerateMoves } from './movegen';
+import { fileChar, FilesBrd, rankChar, RanksBrd, fromSquare, toSquare, promoted, isKnight } from './constants';
+import { BOOL, COLORS, PIECES, noMove, isRookQueen, isBishopQueen } from './constants';
+import { generateMoves } from './movegen';
 import { GameBoard } from './board';
-import { MakeMove, TakeMove } from './makemove';
+import { makeMove, takeMove } from './makemove';
 
-export function PrSq(sq) {
-    return (FileChar[FilesBrd[sq]] + RankChar[RanksBrd[sq]]);
+function printSquare(sq) {
+    return (fileChar[FilesBrd[sq]] + rankChar[RanksBrd[sq]]);
 }
 
-export function PrMove(move) {
+function prMove(move) {
     let MvStr;
 
-    const ff = FilesBrd[FROMSQ(move)];
-    const rf = RanksBrd[FROMSQ(move)];
-    const ft = FilesBrd[TOSQ(move)];
-    const rt = RanksBrd[TOSQ(move)];
+    const ff = FilesBrd[fromSquare(move)];
+    const rf = RanksBrd[fromSquare(move)];
+    const ft = FilesBrd[toSquare(move)];
+    const rt = RanksBrd[toSquare(move)];
 
-    MvStr = FileChar[ff] + RankChar[rf] + FileChar[ft] + RankChar[rt];
+    MvStr = fileChar[ff] + rankChar[rf] + fileChar[ft] + rankChar[rt];
 
-    const promoted = PROMOTED(move);
+    const isPromoted = promoted(move);
 
-    if (promoted !== PIECES.EMPTY) {
+    if (isPromoted !== PIECES.EMPTY) {
         let pchar = 'q';
-        if (PieceKnight[promoted] === BOOL.TRUE) {
+        if (isKnight[isPromoted] === BOOL.TRUE) {
             pchar = 'n';
-        } else if (PieceRookQueen[promoted] === BOOL.TRUE && PieceBishopQueen[promoted] === BOOL.FALSE) {
+        } else if (isRookQueen[isPromoted] === BOOL.TRUE && isBishopQueen[isPromoted] === BOOL.FALSE) {
             pchar = 'r';
-        } else if (PieceRookQueen[promoted] === BOOL.FALSE && PieceBishopQueen[promoted] === BOOL.TRUE) {
+        } else if (isRookQueen[isPromoted] === BOOL.FALSE && isBishopQueen[isPromoted] === BOOL.TRUE) {
             pchar = 'b';
         }
         MvStr += pchar;
@@ -34,7 +34,7 @@ export function PrMove(move) {
     return MvStr;
 }
 
-export function PrintMoveList() {
+function PrintMoveList() {
 
     let index;
     let move;
@@ -43,25 +43,25 @@ export function PrintMoveList() {
 
     for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
         move = GameBoard.moveList[index];
-        console.log('IMove:' + num + ':(' + index + '):' + PrMove(move) + ' Score:' + GameBoard.moveScores[index]);
+        console.log('IMove:' + num + ':(' + index + '):' + prMove(move) + ' Score:' + GameBoard.moveScores[index]);
         num++;
     }
     console.log('End MoveList');
 }
 
-export function ParseMove(from, to) {
+function parseMove(from, to) {
 
-    GenerateMoves();
+    generateMoves();
 
-    let Move = NOMOVE;
+    let Move = noMove;
     let PromPce = PIECES.EMPTY;
     let found = BOOL.FALSE;
 
     for (let index = GameBoard.moveListStart[GameBoard.ply];
         index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
         Move = GameBoard.moveList[index];
-        if (FROMSQ(Move) === from && TOSQ(Move) === to) {
-            PromPce = PROMOTED(Move);
+        if (fromSquare(Move) === from && toSquare(Move) === to) {
+            PromPce = promoted(Move);
             if (PromPce !== PIECES.EMPTY) {
                 if ((PromPce === PIECES.wQ && GameBoard.side === COLORS.WHITE) ||
                     (PromPce === PIECES.bQ && GameBoard.side === COLORS.BLACK)) {
@@ -76,20 +76,19 @@ export function ParseMove(from, to) {
     }
 
     if (found !== BOOL.FALSE) {
-        if (MakeMove(Move) === BOOL.FALSE) {
-            return NOMOVE;
+        if (makeMove(Move) === BOOL.FALSE) {
+            return noMove;
         }
-        TakeMove();
+        takeMove();
         return Move;
     }
 
-    return NOMOVE;
+    return noMove;
 }
 
-// module.exports = {
-//     PrSq,
-//     PrMove,
-//     PrintMoveList,
-//     ParseMove
-// };
-
+export {
+    printSquare,
+    prMove,
+    PrintMoveList,
+    parseMove
+};

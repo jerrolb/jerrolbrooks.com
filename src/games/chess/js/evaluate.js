@@ -1,7 +1,7 @@
 import { GameBoard, pieceIndex, } from './board';
-import { PIECES, COLORS, MIRROR64, SQ64 } from './constants';
+import { PIECES, COLORS, doMirror64, doSq64 } from './constants';
 
-export const PawnTable = [
+const PawnTable = [
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
     10 , 10 , 0 , -10 , -10 , 0 , 10 , 10 ,
     5 , 0 , 0 , 5 , 5 , 0 , 0 , 5 ,
@@ -12,7 +12,7 @@ export const PawnTable = [
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
 ];
 
-export const KnightTable = [
+const KnightTable = [
     0 , -10 , 0 , 0 , 0 , 0 , -10 , 0 ,
     0 , 0 , 0 , 5 , 5 , 0 , 0 , 0 ,
     0 , 0 , 10 , 10 , 10 , 10 , 0 , 0 ,
@@ -23,7 +23,7 @@ export const KnightTable = [
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
 ];
 
-export const BishopTable = [
+const BishopTable = [
     0 , 0 , -10 , 0 , 0 , -10 , 0 , 0 ,
     0 , 0 , 0 , 10 , 10 , 0 , 0 , 0 ,
     0 , 0 , 10 , 15 , 15 , 10 , 0 , 0 ,
@@ -34,7 +34,7 @@ export const BishopTable = [
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
 ];
 
-export const RookTable = [
+const RookTable = [
     0 , 0 , 5 , 10 , 10 , 5 , 0 , 0 ,
     0 , 0 , 5 , 10 , 10 , 5 , 0 , 0 ,
     0 , 0 , 5 , 10 , 10 , 5 , 0 , 0 ,
@@ -45,9 +45,9 @@ export const RookTable = [
     0 , 0 , 5 , 10 , 10 , 5 , 0 , 0
 ];
 
-export const BishopPair = 40;
+const BishopPair = 40;
 
-export function evalPosition() {
+function evalPosition() {
 
     let score = GameBoard.material[COLORS.WHITE] - GameBoard.material[COLORS.BLACK];
 
@@ -58,61 +58,61 @@ export function evalPosition() {
     pce = PIECES.wP;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score += PawnTable[SQ64(sq)];
+        score += PawnTable[doSq64(sq)];
     }
 
     pce = PIECES.bP;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score -= PawnTable[MIRROR64(SQ64(sq))];
+        score -= PawnTable[doMirror64(doSq64(sq))];
     }
 
     pce = PIECES.wN;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score += KnightTable[SQ64(sq)];
+        score += KnightTable[doSq64(sq)];
     }
 
     pce = PIECES.bN;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score -= KnightTable[MIRROR64(SQ64(sq))];
+        score -= KnightTable[doMirror64(doSq64(sq))];
     }
 
     pce = PIECES.wB;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score += BishopTable[SQ64(sq)];
+        score += BishopTable[doSq64(sq)];
     }
 
     pce = PIECES.bB;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score -= BishopTable[MIRROR64(SQ64(sq))];
+        score -= BishopTable[doMirror64(doSq64(sq))];
     }
 
     pce = PIECES.wR;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score += RookTable[SQ64(sq)];
+        score += RookTable[doSq64(sq)];
     }
 
     pce = PIECES.bR;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score -= RookTable[MIRROR64(SQ64(sq))];
+        score -= RookTable[doMirror64(doSq64(sq))];
     }
 
     pce = PIECES.wQ;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score += RookTable[SQ64(sq)];
+        score += RookTable[doSq64(sq)];
     }
 
     pce = PIECES.bQ;
     for (pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
         sq = GameBoard.pList[pieceIndex(pce,pceNum)];
-        score -= RookTable[MIRROR64(SQ64(sq))];
+        score -= RookTable[doMirror64(doSq64(sq))];
     }
 
     if (GameBoard.pceNum[PIECES.wB] >= 2) {
@@ -131,11 +131,11 @@ export function evalPosition() {
 
 }
 
-// module.exports = {
-//     PawnTable,
-//     KnightTable,
-//     BishopTable,
-//     RookTable,
-//     BishopPair,
-//     evalPosition
-// };
+export {
+    PawnTable,
+    KnightTable,
+    BishopTable,
+    RookTable,
+    BishopPair,
+    evalPosition
+};

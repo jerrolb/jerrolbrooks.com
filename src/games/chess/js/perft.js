@@ -1,13 +1,19 @@
-let perft_leafNodes;
+import { BOOL } from './constants';
+import { GameBoard } from './board';
+import { makeMove, takeMove } from './makemove';
+import { generateMoves } from './movegen';
+import { printBoard } from './gui';
+import { prMove } from './pvtable';
 
-function Perft(depth) {
+let perftLeafNodes;
 
+function perft(depth) {
     if (depth === 0) {
-        perft_leafNodes++;
+        perftLeafNodes++;
         return;
     }
 
-    GenerateMoves();
+    generateMoves();
 
     let index;
     let move;
@@ -15,21 +21,20 @@ function Perft(depth) {
     for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
 
         move = GameBoard.moveList[index];
-        if (MakeMove(move) === BOOL.FALSE) {
+        if (makeMove(move) === BOOL.FALSE) {
             continue;
         }
-        Perft(depth - 1);
-        TakeMove();
+        perft(depth - 1);
+        takeMove();
     }
 
     return;
 }
 
-function PerftTest(depth) {
-
-    PrintBoard();
+function perftTest(depth) {
+    printBoard();
     console.log('Starting Test To Depth:' + depth);
-    perft_leafNodes = 0;
+    perftLeafNodes = 0;
 
     let index;
     let move;
@@ -37,20 +42,22 @@ function PerftTest(depth) {
     for (index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
 
         move = GameBoard.moveList[index];
-        if (MakeMove(move) === BOOL.FALSE) {
+        if (makeMove(move) === BOOL.FALSE) {
             continue;
         }
         moveNum++;
-        const cumnodes = perft_leafNodes;
-        Perft(depth - 1);
-        TakeMove();
-        const oldnodes = perft_leafNodes - cumnodes;
-        console.log('move:' + moveNum + ' ' + PrMove(move) + ' ' + oldnodes);
+        const cumnodes = perftLeafNodes;
+        perft(depth - 1);
+        takeMove();
+        const oldnodes = perftLeafNodes - cumnodes;
+        console.log('move:' + moveNum + ' ' + prMove(move) + ' ' + oldnodes);
     }
 
-    console.log('Test Complete : ' + perft_leafNodes + ' leaf nodes visited');
-
+    console.log('Test Complete : ' + perftLeafNodes + ' leaf nodes visited');
     return;
-
 }
 
+export {
+    perft,
+    perftTest
+};
