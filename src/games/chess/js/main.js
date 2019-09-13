@@ -81,53 +81,27 @@ function initBoardVars() {
 }
 
 function initBoardSquares() {
-    let light = 0;
+    let light = 1;
     let rankName;
     let fileName;
+    let rankIter;
+    let fileIter;
     let divString;
-    let lastLight = 0;
-    let rankIter = 0;
-    let fileIter = 0;
     let lightString;
 
     for (rankIter = RANKS.RANK_8; rankIter >= RANKS.RANK_1; rankIter--) {
-        light = lastLight ^ 1;
-        lastLight ^= 1;
+        light ^= 1;
         rankName = 'rank' + (rankIter + 1);
+
         for (fileIter = FILES.FILE_A; fileIter <= FILES.FILE_H; fileIter++) {
             fileName = 'file' + (fileIter + 1);
-
-            if (light === 0) lightString = 'Light';
-            else lightString = 'Dark';
-            divString = '<div class="Square ' + rankName + ' ' + fileName + ' ' + lightString + '"/>';
+            lightString = light === 0 ? 'Light' : 'Dark';
             light ^= 1;
+            divString = `<div class="Square ${ rankName } ${ fileName } ${ lightString }">`;
             $('#Board').append(divString);
         }
     }
 }
-
-// function initBoardSquares() {
-//     var light = 1;
-//     var rankName;
-//     var fileName;
-//     var divString;
-//     var rankIter;
-//     var fileIter;
-//     var lightString;
-
-//     for(rankIter = RANKS.RANK_8; rankIter >= RANKS.RANK_1; rankIter--) {
-//         light ^= 1;
-//         rankName = "rank" + (rankIter + 1);
-//         for(fileIter = FILES.FILE_A; fileIter <= FILES.FILE_H; fileIter++) {
-//             fileName = "file" + (fileIter + 1);
-//             if(light===0) lightString="Light";
-//             else lightString = "Dark";
-//             light^=1;
-//             divString = "<div class=\"Square " + rankName + " " + fileName + " " + lightString + "\"/>";
-//             $("#Board").append(divString);
-//         }
-//     }
-// }
 
 export {
     initFilesRanksBrd,
