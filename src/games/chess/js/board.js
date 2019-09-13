@@ -1,6 +1,7 @@
 import { MAXDEPTH, MAXPOSITIONMOVES, COLORS, PIECES, doSq120 } from './constants';
 import { BOOL, FILES, RANKS, SQUARES, numOfBoardSquares, fileRankToSquare, PieceKeys, CastleKeys, sideKey, pieceColor, pieceValue, rankChar, pceChar, fileChar, sideChar, CASTLEBIT, KnDir, isKnight, isRookQueen, BiDir, RkDir, isBishopQueen, isKing, KiDir, } from './constants';
 import { printSquare } from './io';
+import { setInitialBoardPieces } from './gui';
 
 function pieceIndex(pce, pceNum) {
     return (pce * 10 + pceNum);
@@ -25,7 +26,8 @@ const GameBoard = {
     PvTable: [],
     PvArray: new Array(MAXDEPTH),
     searchHistory: new Array(14 * numOfBoardSquares),
-    searchKillers: new Array(3 * MAXDEPTH)
+    searchKillers: new Array(3 * MAXDEPTH),
+    flipped: false
 };
 
 function CheckBoard() {
@@ -380,7 +382,11 @@ function squareAttacked(sq, side) {
     }
 
     return BOOL.FALSE;
+}
 
+function flipBoard() {
+    GameBoard.flipped = !GameBoard.flipped;
+    setInitialBoardPieces();
 }
 
 export {
@@ -394,5 +400,6 @@ export {
     resetBoard,
     parseFen,
     printSquareAttacked,
-    squareAttacked
+    squareAttacked,
+    flipBoard
 };

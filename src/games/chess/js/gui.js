@@ -1,6 +1,6 @@
 import { pieceIndex, GameBoard, printBoard, parseFen, squareAttacked } from './board';
 import { BOOL, COLORS, PIECES, SQUARES, FilesBrd, RanksBrd, fileRankToSquare, doSq120 } from './constants';
-import { noMove, pieceColor, fromSquare, toSquare, MFLAGEP, MFLAGCA, captured, promoted, Kings, UserMove, sideChar, pceChar, MAXDEPTH, GameController } from './constants';
+import { noMove, pieceColor, fromSquare, toSquare, MFLAGEP, MFLAGCA, captured, promoted, Kings, UserMove, sideChar, pceChar, MAXDEPTH, GameController, mirrorFiles, mirrorRanks } from './constants';
 import { printSquare, parseMove } from './io';
 import { makeMove, takeMove } from './makemove';
 import $ from 'jquery';
@@ -18,6 +18,12 @@ function clearAllPieces() {
     $('.Piece').remove();
 }
 
+function mirror120(sq) {
+    const file = mirrorFiles[FilesBrd[sq]];
+    const rank = mirrorRanks[RanksBrd[sq]];
+    return fileRankToSquare(file, rank);
+}
+
 function setInitialBoardPieces() {
 
     let sq;
@@ -29,6 +35,11 @@ function setInitialBoardPieces() {
     for (sq = 0; sq < 64; ++sq) {
         sq120 = doSq120(sq);
         pce = GameBoard.pieces[sq120];
+
+        if (GameBoard.flipped) {
+            sq120 = mirror120(sq120);
+        }
+
         if (pce >= PIECES.wP && pce <= PIECES.bK) {
             addGuiPiece(sq120, pce);
         }
@@ -36,6 +47,10 @@ function setInitialBoardPieces() {
 }
 
 function deselectSquare(sq) {
+    if (GameBoard.flipped) {
+        sq = mirror120(sq);
+    }
+
     $('.Square').each(function() {
         if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).removeClass('SqSelected');
@@ -44,6 +59,10 @@ function deselectSquare(sq) {
 }
 
 function setSqSelected(sq) {
+    if (GameBoard.flipped) {
+        sq = mirror120(sq);
+    }
+
     $('.Square').each(function() {
         if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).addClass('SqSelected');
@@ -63,8 +82,11 @@ function clickedSquare(pageX, pageY) {
 
     const file = Math.floor((pageX - workedX) / 60);
     const rank = 7 - Math.floor((pageY - workedY) / 60);
+    let sq = fileRankToSquare(file,rank);
 
-    const sq = fileRankToSquare(file,rank);
+    if (GameBoard.flipped) {
+        sq = mirror120(sq);
+    }
 
     console.log('Clicked sq:' + printSquare(sq));
 
@@ -110,13 +132,11 @@ function pieceIsOnSquare(sq, top, left) {
 }
 
 function removeGuiPiece(sq) {
-
     $('.Piece').each(function() {
         if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
             $(this).remove();
         }
     });
-
 }
 
 function addGuiPiece(sq, pce) {
@@ -130,47 +150,70 @@ function addGuiPiece(sq, pce) {
 }
 
 function moveGuiPiece(move) {
-
     const from = fromSquare(move);
     const to = toSquare(move);
+
+    let flippedFrom = from;
+    let flippedTo = to;
+    let epWhite = -10;
+    let epBlack = 10;
+
+    if (GameBoard.flipped) {
+        flippedFrom = mirror120(from);
+        flippedTo = mirror120(to);
+        epWhite = 10;
+        epBlack = -10;
+    }
 
     if (move & MFLAGEP) {
         let epRemove;
         if (GameBoard.side === COLORS.BLACK) {
-            epRemove = to - 10;
+            epRemove = flippedTo + epWhite;
         } else {
-            epRemove = to + 10;
+            epRemove = flippedTo + epBlack;
         }
         removeGuiPiece(epRemove);
     } else if (captured(move)) {
-        removeGuiPiece(to);
+        removeGuiPiece(flippedTo);
     }
 
-    const file = FilesBrd[to];
-    const rank = RanksBrd[to];
+    const file = FilesBrd[flippedTo];
+    const rank = RanksBrd[flippedTo];
     const rankName = 'rank' + (rank + 1);
     const fileName = 'file' + (file + 1);
 
     $('.Piece').each(function() {
-        if (pieceIsOnSquare(from, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
+        if ((RanksBrd[flippedFrom] === 7 - Math.round($(this).position().top / 60)) && (FilesBrd[flippedFrom] === Math.round($(this).position().left / 60))) {
             $(this).removeClass();
             $(this).addClass('Piece ' + rankName + ' ' + fileName);
         }
     });
 
     if (move & MFLAGCA) {
-        switch (to) {
-        case SQUARES.G1: removeGuiPiece(SQUARES.H1); addGuiPiece(SQUARES.F1, PIECES.wR); break;
-        case SQUARES.C1: removeGuiPiece(SQUARES.A1); addGuiPiece(SQUARES.D1, PIECES.wR); break;
-        case SQUARES.G8: removeGuiPiece(SQUARES.H8); addGuiPiece(SQUARES.F8, PIECES.bR); break;
-        case SQUARES.C8: removeGuiPiece(SQUARES.A8); addGuiPiece(SQUARES.D8, PIECES.bR); break;
-        default: break;
+        if (GameBoard.flipped) {
+            switch (to) {
+            case SQUARES.G1: removeGuiPiece(mirror120(SQUARES.H1));addGuiPiece(mirror120(SQUARES.F1),PIECES.wR); break;
+            case SQUARES.C1: removeGuiPiece(mirror120(SQUARES.A1));addGuiPiece(mirror120(SQUARES.D1),PIECES.wR); break;
+            case SQUARES.G8: removeGuiPiece(mirror120(SQUARES.H8));addGuiPiece(mirror120(SQUARES.F8),PIECES.bR); break;
+            case SQUARES.C8: removeGuiPiece(mirror120(SQUARES.A8));addGuiPiece(mirror120(SQUARES.D8),PIECES.bR); break;
+            default: break;
+            }
+        } else {
+            switch (to) {
+            case SQUARES.G1: removeGuiPiece(SQUARES.H1); addGuiPiece(SQUARES.F1, PIECES.wR); break;
+            case SQUARES.C1: removeGuiPiece(SQUARES.A1); addGuiPiece(SQUARES.D1, PIECES.wR); break;
+            case SQUARES.G8: removeGuiPiece(SQUARES.H8); addGuiPiece(SQUARES.F8, PIECES.bR); break;
+            case SQUARES.C8: removeGuiPiece(SQUARES.A8); addGuiPiece(SQUARES.D8, PIECES.bR); break;
+            default: break;
+            }
         }
-    } else if (promoted(move)) {
-        removeGuiPiece(to);
-        addGuiPiece(to, promoted(move));
     }
 
+    const prom = promoted(move);
+    if (prom !== PIECES.EMPTY) {
+        removeGuiPiece(flippedTo);
+        addGuiPiece(flippedTo, prom);
+    }
 }
 
 function drawMaterial() {

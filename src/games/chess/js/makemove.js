@@ -1,5 +1,6 @@
 import { BOOL, COLORS, PIECES, pieceColor, SQUARES, pieceValue, hashPiece, fromSquare, toSquare, hashCastle, hashEnPassant, hashSide, MFLAGEP, MFLAGCA, CastlePerm, captured, isPawn, MFLAGPS, promoted, Kings } from './constants';
 import { GameBoard, pieceIndex, squareAttacked } from './board';
+import { setInitialBoardPieces } from './gui';
 
 function clearPiece(sq) {
     const pce = GameBoard.pieces[sq];
@@ -189,10 +190,19 @@ function takeMove() {
     }
 }
 
+function undoMove () {
+    if (GameBoard.hisPly > 0) {
+        takeMove();
+        GameBoard.ply = 0;
+        setInitialBoardPieces();
+    }
+}
+
 export {
     clearPiece,
     addPiece,
     movePiece,
     makeMove,
-    takeMove
+    takeMove,
+    undoMove
 };

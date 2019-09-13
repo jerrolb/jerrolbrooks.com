@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { initFilesRanksBrd, initHashKeys, initSq120To64, initBoardVars, initBoardSquares } from './js/main';
 import { newGame, clickedSquare, makeUserMove, preSearch } from './js/gui';
 import { initMvvLva } from './js/movegen';
+import { undoMove } from './js/makemove';
+import { flipBoard } from './js/board';
 import * as constants from './js/constants';
 import $ from 'jquery';
 import './styles.css';
@@ -48,8 +50,21 @@ class Chess extends React.Component {
                 <div id="FenInDiv">
                     Fen:
                     <br />
-                    <input type="text" id="fenIn" />
-                    <button type="button" id="SetFen">Set Position</button>
+                    <input
+                        id="fenIn"
+                        type="text"
+                        ref={ (elem) => this.fenIn = elem }
+                        defaultValue={ constants.START_FEN }
+                    />
+                    <button
+                        id="SetFen"
+                        type="button"
+                        onClick={ () => {
+                            newGame(this.fenIn.value);
+                        } }
+                    >
+                        Set Position
+                    </button>
                 </div>
                 <div id="Board">
                 </div>
@@ -68,10 +83,36 @@ class Chess extends React.Component {
                     <span id="NodesOut">Nodes:</span><br />
                     <span id="OrderingOut">Ordering:</span><br />
                     <span id="TimeOut">Time:</span><br /><br />
-                    <button type="button" id="SearchButton" onClick={ this.moveNow }>Move Now</button><br />
-                    <button type="button" id="newGameButton">New Game</button><br />
-                    <button type="button" id="FlipButton">Flip Board</button><br /><br />
-                    <button type="button" id="TakeButton">Take Back</button><br /><br /><br />
+                    <button
+                        id="SearchButton"
+                        type="button"
+                        onClick={ this.moveNow }
+                    >
+                        Move Now
+                    </button><br />
+                    <button
+                        id="newGameButton"
+                        type="button"
+                        onClick={ () => {
+                            newGame(constants.START_FEN);
+                        } }
+                    >
+                        New Game
+                    </button><br />
+                    <button
+                        id="FlipButton"
+                        type="button"
+                        onClick={ flipBoard }
+                    >
+                        Flip Board
+                    </button><br /><br />
+                    <button
+                        id="TakeButton"
+                        type="button"
+                        onClick={ undoMove }
+                    >
+                        Take Back
+                    </button><br /><br /><br />
                     <span id="GameStatus"></span>
                 </div>
             </div>
