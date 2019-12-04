@@ -41,3 +41,8 @@ ul {
 #log li:focus {
   background-color: #d4ebf2;
 }
+
+.diceroll, select {
+    padding: 2px 3px;
+    margin: 0px 1px;
+}
