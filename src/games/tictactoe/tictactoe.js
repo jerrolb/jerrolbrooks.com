@@ -146,9 +146,9 @@ class TicTacToe extends React.Component {
             <div id="container">
                 <p id="blurb">Designed by my daughters Jane and Lauren</p>
                 <div id="playerAvatars">
-                    <img src={ kitty } alt="kitty" ></img>
+                    <img src={ kitty } alt="kitty" />
                     <p>VS</p>
-                    <img src={ puppy } alt="puppy"></img>
+                    <img src={ puppy } alt="puppy" />
                 </div>
                 <p id="status">{status}</p>
 
