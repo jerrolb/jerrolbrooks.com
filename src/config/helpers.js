@@ -4,9 +4,13 @@ export const resetMenus = () => {
     const selected = document.getElementsByClassName('ant-menu-item-selected');
 
     if (selected.length) {
-        Object.values(allMenuItems).forEach((each) => {
-            each.style.backgroundColor = '#fff';
-            each.children[0].style.color = 'rgba(0, 0, 0, 0.65)';
+        Object.values(allMenuItems).forEach((item) => {
+            if (item.style.backgroundColor !== '#fff') {
+                item.style.backgroundColor = '#fff';
+            }
+            if (item.children[0].style.color !== 'rgba(0, 0, 0, 0.65)') {
+                item.children[0].style.color = 'rgba(0, 0, 0, 0.65)';
+            }
         });
 
         active[0].style.backgroundColor = '#e6f7ff';
