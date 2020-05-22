@@ -1,9 +1,11 @@
+import Chess from './chess/chess.js';
+import Cube from './cube/cube.js';
 import Dice from './diceroller/dice.js';
 import TicTacToe from './tictactoe/tictactoe.js';
-import Chess from './chess/chess.js';
 
 export {
+    Chess,
+    Cube,
     Dice,
     TicTacToe,
-    Chess
 };

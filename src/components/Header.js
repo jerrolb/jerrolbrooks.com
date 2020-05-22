@@ -23,12 +23,12 @@ const Header = () => {
                 style={ menuStyle }
             >
                 <Menu.Item
-                    key={ 'API' }
+                    key={ SCREENS.CUBE }
                     onClick={ resetMenus }
                 >
-                    <NavLink to={ ROUTES.API } className="nav-text">
-                        <Icon type="api" />
-                        Api
+                    <NavLink to={ ROUTES.CUBE } className="nav-text">
+                        <Icon type="table" />
+                        Rubik's Cube
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item
@@ -56,6 +56,15 @@ const Header = () => {
                     <NavLink to={ ROUTES.CHESS } className="nav-text">
                         <Icon type="play-square" />
                         Chess
+                    </NavLink>
+                </Menu.Item>
+                <Menu.Item
+                    key={ SCREENS.API }
+                    onClick={ resetMenus }
+                >
+                    <NavLink to={ ROUTES.API } className="nav-text">
+                        <Icon type="api" />
+                        Api
                     </NavLink>
                 </Menu.Item>
             </Menu>

@@ -1,39 +1,43 @@
 export const SCREENS = {
-    HOME: '/',
     ABOUT: 'about',
-    TICTACTOE: 'ticTacToe',
-    DICEROLLER: 'diceRoller',
+    API: 'api',
     CHESS: 'chess',
-    API: 'api'
+    CUBE: 'cube',
+    DICEROLLER: 'diceRoller',
+    HOME: '/',
+    TICTACTOE: 'ticTacToe',
 };
 
 export const ROUTES = {
-    HOME: '/',
     ABOUT: '/about',
-    TICTACTOE: '/games/tictactoe',
+    API: '/api',
+    CUBE: '/games/cube',
     DICEROLLER: '/games/diceroller',
     CHESS: '/games/chess',
-    API: '/api'
+    HOME: '/',
+    TICTACTOE: '/games/tictactoe'
 };
 
 export const LINKS = {
-    GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com',
-    LINKEDIN: 'https://linkedin.com/in/jerrolb',
-    REACT: 'https://reactjs.org/',
-    REDUX: 'https://redux.js.org/',
     ANTD: 'https://ant.design/',
-    BLUEFEVER: 'https://www.youtube.com/user/BlueFeverSoft/',
     API: {
         HELLO: 'https://jerrolbrooks.com/api/hello',
         TEXTQUERY_PASS: 'https://jerrolbrooks.com/api/textQuery?text=Some text',
         TEXTQUERY_FAIL: 'https://jerrolbrooks.com/api/textQuery'
-    }
+    },
+    BLUEFEVER: 'https://www.youtube.com/user/BlueFeverSoft/',
+    FREELANCER: 'https://freelancer.com/u/jerrolb',
+    GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com',
+    LINKEDIN: 'https://linkedin.com/in/jerrolb',
+    REACT: 'https://reactjs.org/',
+    REDUX: 'https://redux.js.org/'
 };
 
 export const KEYS = {
+    BLUEFEVER: 'Bluefever',
+    FREELANCER: 'Freelancer',
     GITHUB: 'GitHub',
     LINKEDIN: 'LinkedIn',
-    BLUEFEVER: 'Bluefever'
 };
 
 export const WIDTHS = {
