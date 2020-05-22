@@ -122,9 +122,11 @@ class Chess extends React.Component {
 }
 
 function mapStateToProps () {
+    return {};
 }
 
 function mapDispatchToProps () {
+    return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chess);
