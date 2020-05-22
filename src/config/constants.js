@@ -19,6 +19,7 @@ export const ROUTES = {
 export const LINKS = {
     GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com',
     LINKEDIN: 'https://linkedin.com/in/jerrolb',
+    FREELANCER: 'https://freelancer.com/u/jerrolb',
     REACT: 'https://reactjs.org/',
     REDUX: 'https://redux.js.org/',
     ANTD: 'https://ant.design/',
@@ -31,9 +32,10 @@ export const LINKS = {
 };
 
 export const KEYS = {
+    BLUEFEVER: 'Bluefever',
+    FREELANCER: 'Freelancer',
     GITHUB: 'GitHub',
     LINKEDIN: 'LinkedIn',
-    BLUEFEVER: 'Bluefever'
 };
 
 export const WIDTHS = {

@@ -9,7 +9,7 @@ const LeftSider = () => {
         <Layout.Sider
             breakpoint="md"
             collapsedWidth="0"
-            width={ 120 }
+            width={ 130 }
             style={ { borderRight: '1px solid' } }
         >
             <Menu id="siderMenu">
@@ -47,6 +47,15 @@ const LeftSider = () => {
                     <a href={ LINKS.LINKEDIN } target={ '_blank' }>
                         <Icon type="linkedin" />
                         LinkedIn
+                    </a>
+                </Menu.Item>
+                <Menu.Item
+                    key={ KEYS.FREELANCER }
+                    onClick={ resetMenus }
+                >
+                    <a href={ LINKS.FREELANCER } target={ '_blank' }>
+                        <Icon type="code" />
+                        Freelancer
                     </a>
                 </Menu.Item>
             </Menu>
