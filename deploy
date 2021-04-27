@@ -1,11 +1,9 @@
 #!/bin/bash
 npm run build
 mv firebase/firebase.json .
-mv firebase/functions .
 rm -rf firebase
 mkdir firebase
 mv firebase.json firebase/
-mv functions firebase/
 cd firebase
 cp -r ../build/* .
 firebase deploy
