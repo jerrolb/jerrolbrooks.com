@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
-import { ROUTES, LINKS, SCREENS, KEYS } from '../config/constants';
+import { ROUTES, LINKS, KEYS } from '../config/constants';
 import { resetMenus } from '../config/helpers';
 
 const LeftSider = () => {
@@ -14,21 +14,21 @@ const LeftSider = () => {
         >
             <Menu id="siderMenu">
                 <Menu.Item
-                    key={ SCREENS.HOME }
+                    key={ KEYS.HOME }
                     onClick={ resetMenus }
                 >
                     <NavLink to={ ROUTES.HOME } className="nav-text">
                         <Icon type="home" />
-                        Home
+                        { KEYS.HOME }
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item
-                    key={ SCREENS.ABOUT }
+                    key={ KEYS.ABOUT }
                     onClick={ resetMenus }
                 >
                     <NavLink to={ ROUTES.ABOUT } className="nav-text">
                         <Icon type="info" />
-                        About
+                        { KEYS.ABOUT }
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item
@@ -37,7 +37,7 @@ const LeftSider = () => {
                 >
                     <a href={ LINKS.GITHUB } target={ '_blank' } rel="noopener noreferrer">
                         <Icon type="github" />
-                        GitHub
+                        { KEYS.GITHUB }
                     </a>
                 </Menu.Item>
                 <Menu.Item
@@ -46,7 +46,7 @@ const LeftSider = () => {
                 >
                     <a href={ LINKS.LINKEDIN } target={ '_blank' } rel="noopener noreferrer">
                         <Icon type="linkedin" />
-                        LinkedIn
+                        { KEYS.LINKEDIN }
                     </a>
                 </Menu.Item>
                 <Menu.Item
@@ -55,7 +55,34 @@ const LeftSider = () => {
                 >
                     <a href={ LINKS.FREELANCER } target={ '_blank' } rel="noopener noreferrer">
                         <Icon type="code" />
-                        Freelancer
+                        { KEYS.FREELANCER }
+                    </a>
+                </Menu.Item>
+                <Menu.Item
+                    key={ KEYS.LEETCODE }
+                    onClick={ resetMenus }
+                >
+                    <a href={ LINKS.LEETCODE } target={ '_blank' } rel="noopener noreferrer">
+                        <Icon type="code" />
+                        { KEYS.LEETCODE }
+                    </a>
+                </Menu.Item>
+                <Menu.Item
+                    key={ KEYS.RESUME }
+                    onClick={ resetMenus }
+                >
+                    <a href={ LINKS.RESUME } target={ '_blank' } rel="noopener noreferrer">
+                        <Icon type="snippets" />
+                        { KEYS.RESUME }
+                    </a>
+                </Menu.Item>
+                <Menu.Item
+                    key={ KEYS.EMAIL }
+                    onClick={ resetMenus }
+                >
+                    <a href="mailto: jerrolb@gmail.com">
+                        <Icon type="mail" />
+                        { KEYS.EMAIL }
                     </a>
                 </Menu.Item>
             </Menu>

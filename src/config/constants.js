@@ -17,20 +17,27 @@ export const ROUTES = {
 };
 
 export const LINKS = {
-    ANTD: 'https://ant.design/',
-    BLUEFEVER: 'https://www.youtube.com/user/BlueFeverSoft/',
+    ANTD: 'https://ant.design',
+    BLUEFEVER: 'https://www.youtube.com/user/BlueFeverSoft',
     FREELANCER: 'https://freelancer.com/u/jerrolb',
-    GITHUB: 'https://github.com/jerrolb/jerrolbrooks.com',
+    GITHUB: 'https://github.com/jerrolb',
+    LEETCODE: 'https://leetcode.com/jerrolb',
     LINKEDIN: 'https://linkedin.com/in/jerrolb',
-    REACT: 'https://reactjs.org/',
-    REDUX: 'https://redux.js.org/'
+    REACT: 'https://reactjs.org',
+    REDUX: 'https://redux.js.org',
+    RESUME: 'https://docs.google.com/document/d/1rJ64kBjtB6Cjf8mK6DJ1xymx2KVZRtxubeWrI55r_YM/edit?usp=sharing',
 };
 
 export const KEYS = {
+    ABOUT: 'About',
     BLUEFEVER: 'Bluefever',
+    EMAIL: 'Email',
     FREELANCER: 'Freelancer',
     GITHUB: 'GitHub',
+    HOME: 'Home',
+    LEETCODE: 'LeetCode',
     LINKEDIN: 'LinkedIn',
+    RESUME: 'Resume',
 };
 
 export const WIDTHS = {
