@@ -16,48 +16,22 @@ const Header = () => {
         justifyContent: 'center'
     };
 
+    const headerItem = (screen, route, icon, text) => (
+        <Menu.Item key={ screen } onClick={ resetMenus }>
+            <NavLink to={ route }>
+                <Icon type={ icon } />
+                { text }
+            </NavLink>
+        </Menu.Item>
+    );
+
     return (
         <Layout.Header style={ headerStyle }>
-            <Menu
-                id="headerMenu"
-                style={ menuStyle }
-            >
-                <Menu.Item
-                    key={ SCREENS.CUBE }
-                    onClick={ resetMenus }
-                >
-                    <NavLink to={ ROUTES.CUBE } className="nav-text">
-                        <Icon type="table" />
-                        Rubik's Cube
-                    </NavLink>
-                </Menu.Item>
-                <Menu.Item
-                    key={ SCREENS.DICEROLLER }
-                    onClick={ resetMenus }
-                >
-                    <NavLink to={ ROUTES.DICEROLLER } className="nav-text">
-                        <Icon type="dot-chart" />
-                        Dice Roller
-                    </NavLink>
-                </Menu.Item>
-                <Menu.Item
-                    key={ SCREENS.TICTACTOE }
-                    onClick={ resetMenus }
-                >
-                    <NavLink to={ ROUTES.TICTACTOE } className="nav-text">
-                        <Icon type="close-square" />
-                        Tic-Tac-Toe
-                    </NavLink>
-                </Menu.Item>
-                <Menu.Item
-                    key={ SCREENS.CHESS }
-                    onClick={ resetMenus }
-                >
-                    <NavLink to={ ROUTES.CHESS } className="nav-text">
-                        <Icon type="play-square" />
-                        Chess
-                    </NavLink>
-                </Menu.Item>
+            <Menu id="headerMenu" style={ menuStyle }>
+                { headerItem(SCREENS.CHESS, ROUTES.CHESS, 'play-square', 'Chess')}
+                { headerItem(SCREENS.DICEROLLER, ROUTES.DICEROLLER, 'dot-chart', 'Dice Roller')}
+                { headerItem(SCREENS.TICTACTOE, ROUTES.TICTACTOE, 'close-square', 'Tic-Tac-Toe')}
+                { headerItem(SCREENS.CUBE, ROUTES.CUBE, 'table', 'Rubik\'s Cube')}
             </Menu>
         </Layout.Header>
     );
