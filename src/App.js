@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ROUTES } from './config/constants';
 import { Header, LeftSider, About } from './components';
-import { Api } from './api';
 import { Chess, Cube, Dice, TicTacToe } from './games';
 import './App.css';
 import { Layout } from 'antd';
@@ -20,7 +19,6 @@ class App extends React.Component {
     }
 
     about = () => <About />;
-    api = () => <Api />;
     chess = () => <Chess />;
     cube = () => <Cube />;
     diceRoller = () => <Dice />;
@@ -33,7 +31,6 @@ class App extends React.Component {
                 <Layout>
                     <LeftSider />
                     <Content>
-                        <Route path={ ROUTES.API } component={ this.api } />
                         <Route path={ ROUTES.ABOUT } component={ this.about } />
                         <Route path={ ROUTES.CHESS } component={ this.chess } />
                         <Route path={ ROUTES.CUBE } component={ this.cube } />

@@ -58,15 +58,6 @@ const Header = () => {
                         Chess
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item
-                    key={ SCREENS.API }
-                    onClick={ resetMenus }
-                >
-                    <NavLink to={ ROUTES.API } className="nav-text">
-                        <Icon type="api" />
-                        Api
-                    </NavLink>
-                </Menu.Item>
             </Menu>
         </Layout.Header>
     );

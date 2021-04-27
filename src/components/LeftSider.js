@@ -35,7 +35,7 @@ const LeftSider = () => {
                     key={ KEYS.GITHUB }
                     onClick={ resetMenus }
                 >
-                    <a href={ LINKS.GITHUB } target={ '_blank' }>
+                    <a href={ LINKS.GITHUB } target={ '_blank' } rel="noopener noreferrer">
                         <Icon type="github" />
                         GitHub
                     </a>
@@ -44,7 +44,7 @@ const LeftSider = () => {
                     key={ KEYS.LINKEDIN }
                     onClick={ resetMenus }
                 >
-                    <a href={ LINKS.LINKEDIN } target={ '_blank' }>
+                    <a href={ LINKS.LINKEDIN } target={ '_blank' } rel="noopener noreferrer">
                         <Icon type="linkedin" />
                         LinkedIn
                     </a>
@@ -53,7 +53,7 @@ const LeftSider = () => {
                     key={ KEYS.FREELANCER }
                     onClick={ resetMenus }
                 >
-                    <a href={ LINKS.FREELANCER } target={ '_blank' }>
+                    <a href={ LINKS.FREELANCER } target={ '_blank' } rel="noopener noreferrer">
                         <Icon type="code" />
                         Freelancer
                     </a>
