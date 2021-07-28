@@ -25,7 +25,7 @@ export const LINKS = {
     LINKEDIN: 'https://linkedin.com/in/jerrolb',
     REACT: 'https://reactjs.org',
     REDUX: 'https://redux.js.org',
-    RESUME: 'https://docs.google.com/document/d/1rJ64kBjtB6Cjf8mK6DJ1xymx2KVZRtxubeWrI55r_YM/edit?usp=sharing',
+    RESUME: 'https://drive.google.com/file/d/1EzkByZcPQO5PFwGQJexnNoY7I8AzSWn6/view?usp=sharing',
 };
 
 export const KEYS = {
