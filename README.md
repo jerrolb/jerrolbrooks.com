@@ -1,3 +1,1 @@
-# About
-
-Jerrol Brooks' personal website
+# Deprecated
