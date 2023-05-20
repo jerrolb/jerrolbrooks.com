@@ -1,33 +1,44 @@
 {
-  "name": "jerrol",
-  "version": "1.1.1",
+  "name": "src",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.26.17",
-    "jquery": "^3.5.1",
-    "lodash": "^4.17.21",
-    "lodash.template": "^4.5.0",
-    "moment": "^2.26.0",
-    "react": "^16.13.1",
+    "@mui/material": "^5.13.1",
+    "@reduxjs/toolkit": "^1.9.5",
+    "eslint": "^8.40.0",
+    "jquery": "^3.6.4",
+    "react": "^18.2.0",
     "react-app": "^1.1.2",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1",
+    "react-dom": "^18.2.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
     "redux": "^4.0.5",
     "redux-persist": "^5.10.0",
     "serialize-javascript": "^3.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "@mui/types": "^7.2.4",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.26",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.4",
+    "react-scripts": "5.0.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "eslint": "npx eslint src/"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -40,6 +51,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }

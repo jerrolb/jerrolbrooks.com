@@ -8,342 +8,342 @@ import { generateMoves } from './movegen';
 import { SearchController, searchPosition } from './search';
 
 function newGame(fenStr) {
-    parseFen(fenStr);
-    printBoard();
-    setInitialBoardPieces();
-    checkAndSet();
+  parseFen(fenStr);
+  printBoard();
+  setInitialBoardPieces();
+  checkAndSet();
 }
 
 function clearAllPieces() {
-    $('.Piece').remove();
+  $('.Piece').remove();
 }
 
 function mirror120(sq) {
-    const file = mirrorFiles[FilesBrd[sq]];
-    const rank = mirrorRanks[RanksBrd[sq]];
-    return fileRankToSquare(file, rank);
+  const file = mirrorFiles[FilesBrd[sq]];
+  const rank = mirrorRanks[RanksBrd[sq]];
+  return fileRankToSquare(file, rank);
 }
 
 function setInitialBoardPieces() {
 
-    let sq;
-    let sq120;
-    let pce;
+  let sq;
+  let sq120;
+  let pce;
 
-    clearAllPieces();
+  clearAllPieces();
 
-    for (sq = 0; sq < 64; ++sq) {
-        sq120 = doSq120(sq);
-        pce = GameBoard.pieces[sq120];
+  for (sq = 0; sq < 64; ++sq) {
+    sq120 = doSq120(sq);
+    pce = GameBoard.pieces[sq120];
 
-        if (GameBoard.flipped) {
-            sq120 = mirror120(sq120);
-        }
-
-        if (pce >= PIECES.wP && pce <= PIECES.bK) {
-            addGuiPiece(sq120, pce);
-        }
+    if (GameBoard.flipped) {
+      sq120 = mirror120(sq120);
     }
+
+    if (pce >= PIECES.wP && pce <= PIECES.bK) {
+      addGuiPiece(sq120, pce);
+    }
+  }
 }
 
 function deselectSquare(sq) {
-    if (GameBoard.flipped) {
-        sq = mirror120(sq);
-    }
+  if (GameBoard.flipped) {
+    sq = mirror120(sq);
+  }
 
-    $('.Square').each(function() {
-        if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
-            $(this).removeClass('SqSelected');
-        }
-    });
+  $('.Square').each(function() {
+    if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
+      $(this).removeClass('SqSelected');
+    }
+  });
 }
 
 function setSqSelected(sq) {
-    if (GameBoard.flipped) {
-        sq = mirror120(sq);
-    }
+  if (GameBoard.flipped) {
+    sq = mirror120(sq);
+  }
 
-    $('.Square').each(function() {
-        if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
-            $(this).addClass('SqSelected');
-        }
-    });
+  $('.Square').each(function() {
+    if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
+      $(this).addClass('SqSelected');
+    }
+  });
 }
 
 function clickedSquare(pageX, pageY) {
-    console.log('clickedSquare() at ' + pageX + ',' + pageY);
-    const position = $('#Board').position();
+  console.log('clickedSquare() at ' + pageX + ',' + pageY);
+  const position = $('#Board').position();
 
-    const workedX = Math.floor(position.left);
-    const workedY = Math.floor(position.top);
+  const workedX = Math.floor(position.left);
+  const workedY = Math.floor(position.top);
 
-    pageX = Math.floor(pageX);
-    pageY = Math.floor(pageY);
+  pageX = Math.floor(pageX);
+  pageY = Math.floor(pageY);
 
-    const file = Math.floor((pageX - workedX) / 60);
-    const rank = 7 - Math.floor((pageY - workedY) / 60);
-    let sq = fileRankToSquare(file,rank);
+  const file = Math.floor((pageX - workedX) / 60);
+  const rank = 7 - Math.floor((pageY - workedY) / 60);
+  let sq = fileRankToSquare(file,rank);
 
-    if (GameBoard.flipped) {
-        sq = mirror120(sq);
-    }
+  if (GameBoard.flipped) {
+    sq = mirror120(sq);
+  }
 
-    console.log('Clicked sq:' + printSquare(sq));
+  console.log('Clicked sq:' + printSquare(sq));
 
-    setSqSelected(sq);
+  setSqSelected(sq);
 
-    return sq;
+  return sq;
 }
 
 function makeUserMove() {
 
-    if (UserMove.from !== SQUARES.NO_SQ && UserMove.to !== SQUARES.NO_SQ) {
+  if (UserMove.from !== SQUARES.NO_SQ && UserMove.to !== SQUARES.NO_SQ) {
 
-        console.log('User Move:' + printSquare(UserMove.from) + printSquare(UserMove.to));
+    console.log('User Move:' + printSquare(UserMove.from) + printSquare(UserMove.to));
 
-        const parsed = parseMove(UserMove.from,UserMove.to);
+    const parsed = parseMove(UserMove.from,UserMove.to);
 
-        if (parsed !== noMove) {
-            makeMove(parsed);
-            printBoard();
-            moveGuiPiece(parsed);
-            checkAndSet();
-            preSearch();
-        }
-
-        deselectSquare(UserMove.from);
-        deselectSquare(UserMove.to);
-
-        UserMove.from = SQUARES.NO_SQ;
-        UserMove.to = SQUARES.NO_SQ;
+    if (parsed !== noMove) {
+      makeMove(parsed);
+      printBoard();
+      moveGuiPiece(parsed);
+      checkAndSet();
+      preSearch();
     }
+
+    deselectSquare(UserMove.from);
+    deselectSquare(UserMove.to);
+
+    UserMove.from = SQUARES.NO_SQ;
+    UserMove.to = SQUARES.NO_SQ;
+  }
 
 }
 
 function pieceIsOnSquare(sq, top, left) {
 
-    if ((RanksBrd[sq] === 7 - Math.round(top / 60)) &&
+  if ((RanksBrd[sq] === 7 - Math.round(top / 60)) &&
         FilesBrd[sq] === Math.round(left / 60)) {
-        return BOOL.TRUE;
-    }
+    return BOOL.TRUE;
+  }
 
-    return BOOL.FALSE;
+  return BOOL.FALSE;
 
 }
 
 function removeGuiPiece(sq) {
-    $('.Piece').each(function() {
-        if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
-            $(this).remove();
-        }
-    });
+  $('.Piece').each(function() {
+    if (pieceIsOnSquare(sq, $(this).position().top, $(this).position().left) === BOOL.TRUE) {
+      $(this).remove();
+    }
+  });
 }
 
 function addGuiPiece(sq, pce) {
-    const file = FilesBrd[sq];
-    const rank = RanksBrd[sq];
-    const rankName = 'rank' + (rank + 1);
-    const fileName = 'file' + (file + 1);
-    const pieceFileName = '/images/' + sideChar[pieceColor[pce]] + pceChar[pce].toUpperCase() + '.png';
-    const imageString = '<image src="' + pieceFileName + '" class="Piece ' + rankName + ' ' + fileName + '"/>';
-    $('#Board').append(imageString);
+  const file = FilesBrd[sq];
+  const rank = RanksBrd[sq];
+  const rankName = 'rank' + (rank + 1);
+  const fileName = 'file' + (file + 1);
+  const pieceFileName = '/images/' + sideChar[pieceColor[pce]] + pceChar[pce].toUpperCase() + '.png';
+  const imageString = '<image src="' + pieceFileName + '" class="Piece ' + rankName + ' ' + fileName + '"/>';
+  $('#Board').append(imageString);
 }
 
 function moveGuiPiece(move) {
-    const from = fromSquare(move);
-    const to = toSquare(move);
+  const from = fromSquare(move);
+  const to = toSquare(move);
 
-    let flippedFrom = from;
-    let flippedTo = to;
-    let epWhite = -10;
-    let epBlack = 10;
+  let flippedFrom = from;
+  let flippedTo = to;
+  let epWhite = -10;
+  let epBlack = 10;
 
+  if (GameBoard.flipped) {
+    flippedFrom = mirror120(from);
+    flippedTo = mirror120(to);
+    epWhite = 10;
+    epBlack = -10;
+  }
+
+  if (move & MFLAGEP) {
+    let epRemove;
+    if (GameBoard.side === COLORS.BLACK) {
+      epRemove = flippedTo + epWhite;
+    } else {
+      epRemove = flippedTo + epBlack;
+    }
+    removeGuiPiece(epRemove);
+  } else if (captured(move)) {
+    removeGuiPiece(flippedTo);
+  }
+
+  const file = FilesBrd[flippedTo];
+  const rank = RanksBrd[flippedTo];
+  const rankName = 'rank' + (rank + 1);
+  const fileName = 'file' + (file + 1);
+
+  $('.Piece').each(function() {
+    if ((RanksBrd[flippedFrom] === 7 - Math.round($(this).position().top / 60)) && (FilesBrd[flippedFrom] === Math.round($(this).position().left / 60))) {
+      $(this).removeClass();
+      $(this).addClass('Piece ' + rankName + ' ' + fileName);
+    }
+  });
+
+  if (move & MFLAGCA) {
     if (GameBoard.flipped) {
-        flippedFrom = mirror120(from);
-        flippedTo = mirror120(to);
-        epWhite = 10;
-        epBlack = -10;
+      switch (to) {
+      case SQUARES.G1: removeGuiPiece(mirror120(SQUARES.H1));addGuiPiece(mirror120(SQUARES.F1),PIECES.wR); break;
+      case SQUARES.C1: removeGuiPiece(mirror120(SQUARES.A1));addGuiPiece(mirror120(SQUARES.D1),PIECES.wR); break;
+      case SQUARES.G8: removeGuiPiece(mirror120(SQUARES.H8));addGuiPiece(mirror120(SQUARES.F8),PIECES.bR); break;
+      case SQUARES.C8: removeGuiPiece(mirror120(SQUARES.A8));addGuiPiece(mirror120(SQUARES.D8),PIECES.bR); break;
+      default: break;
+      }
+    } else {
+      switch (to) {
+      case SQUARES.G1: removeGuiPiece(SQUARES.H1); addGuiPiece(SQUARES.F1, PIECES.wR); break;
+      case SQUARES.C1: removeGuiPiece(SQUARES.A1); addGuiPiece(SQUARES.D1, PIECES.wR); break;
+      case SQUARES.G8: removeGuiPiece(SQUARES.H8); addGuiPiece(SQUARES.F8, PIECES.bR); break;
+      case SQUARES.C8: removeGuiPiece(SQUARES.A8); addGuiPiece(SQUARES.D8, PIECES.bR); break;
+      default: break;
+      }
     }
+  }
 
-    if (move & MFLAGEP) {
-        let epRemove;
-        if (GameBoard.side === COLORS.BLACK) {
-            epRemove = flippedTo + epWhite;
-        } else {
-            epRemove = flippedTo + epBlack;
-        }
-        removeGuiPiece(epRemove);
-    } else if (captured(move)) {
-        removeGuiPiece(flippedTo);
-    }
-
-    const file = FilesBrd[flippedTo];
-    const rank = RanksBrd[flippedTo];
-    const rankName = 'rank' + (rank + 1);
-    const fileName = 'file' + (file + 1);
-
-    $('.Piece').each(function() {
-        if ((RanksBrd[flippedFrom] === 7 - Math.round($(this).position().top / 60)) && (FilesBrd[flippedFrom] === Math.round($(this).position().left / 60))) {
-            $(this).removeClass();
-            $(this).addClass('Piece ' + rankName + ' ' + fileName);
-        }
-    });
-
-    if (move & MFLAGCA) {
-        if (GameBoard.flipped) {
-            switch (to) {
-            case SQUARES.G1: removeGuiPiece(mirror120(SQUARES.H1));addGuiPiece(mirror120(SQUARES.F1),PIECES.wR); break;
-            case SQUARES.C1: removeGuiPiece(mirror120(SQUARES.A1));addGuiPiece(mirror120(SQUARES.D1),PIECES.wR); break;
-            case SQUARES.G8: removeGuiPiece(mirror120(SQUARES.H8));addGuiPiece(mirror120(SQUARES.F8),PIECES.bR); break;
-            case SQUARES.C8: removeGuiPiece(mirror120(SQUARES.A8));addGuiPiece(mirror120(SQUARES.D8),PIECES.bR); break;
-            default: break;
-            }
-        } else {
-            switch (to) {
-            case SQUARES.G1: removeGuiPiece(SQUARES.H1); addGuiPiece(SQUARES.F1, PIECES.wR); break;
-            case SQUARES.C1: removeGuiPiece(SQUARES.A1); addGuiPiece(SQUARES.D1, PIECES.wR); break;
-            case SQUARES.G8: removeGuiPiece(SQUARES.H8); addGuiPiece(SQUARES.F8, PIECES.bR); break;
-            case SQUARES.C8: removeGuiPiece(SQUARES.A8); addGuiPiece(SQUARES.D8, PIECES.bR); break;
-            default: break;
-            }
-        }
-    }
-
-    const prom = promoted(move);
-    if (prom !== PIECES.EMPTY) {
-        removeGuiPiece(flippedTo);
-        addGuiPiece(flippedTo, prom);
-    }
+  const prom = promoted(move);
+  if (prom !== PIECES.EMPTY) {
+    removeGuiPiece(flippedTo);
+    addGuiPiece(flippedTo, prom);
+  }
 }
 
 function drawMaterial() {
 
-    if (GameBoard.pceNum[PIECES.wP] !== 0 || GameBoard.pceNum[PIECES.bP] !== 0) return BOOL.FALSE;
-    if (GameBoard.pceNum[PIECES.wQ] !== 0 || GameBoard.pceNum[PIECES.bQ] !== 0 ||
+  if (GameBoard.pceNum[PIECES.wP] !== 0 || GameBoard.pceNum[PIECES.bP] !== 0) return BOOL.FALSE;
+  if (GameBoard.pceNum[PIECES.wQ] !== 0 || GameBoard.pceNum[PIECES.bQ] !== 0 ||
                     GameBoard.pceNum[PIECES.wR] !== 0 || GameBoard.pceNum[PIECES.bR] !== 0) return BOOL.FALSE;
-    if (GameBoard.pceNum[PIECES.wB] > 1 || GameBoard.pceNum[PIECES.bB] > 1) {
-        return BOOL.FALSE;
-    }
-    if (GameBoard.pceNum[PIECES.wN] > 1 || GameBoard.pceNum[PIECES.bN] > 1) {
-        return BOOL.FALSE;
-    }
+  if (GameBoard.pceNum[PIECES.wB] > 1 || GameBoard.pceNum[PIECES.bB] > 1) {
+    return BOOL.FALSE;
+  }
+  if (GameBoard.pceNum[PIECES.wN] > 1 || GameBoard.pceNum[PIECES.bN] > 1) {
+    return BOOL.FALSE;
+  }
 
-    if (GameBoard.pceNum[PIECES.wN] !== 0 && GameBoard.pceNum[PIECES.wB] !== 0) {
-        return BOOL.FALSE;
-    }
-    if (GameBoard.pceNum[PIECES.bN] !== 0 && GameBoard.pceNum[PIECES.bB] !== 0) {
-        return BOOL.FALSE;
-    }
+  if (GameBoard.pceNum[PIECES.wN] !== 0 && GameBoard.pceNum[PIECES.wB] !== 0) {
+    return BOOL.FALSE;
+  }
+  if (GameBoard.pceNum[PIECES.bN] !== 0 && GameBoard.pceNum[PIECES.bB] !== 0) {
+    return BOOL.FALSE;
+  }
 
-    return BOOL.TRUE;
+  return BOOL.TRUE;
 }
 
 function threeFoldRep() {
-    let i = 0, r = 0;
+  let i = 0, r = 0;
 
-    for (i = 0; i < GameBoard.hisPly; ++i) {
-        if (GameBoard.history[i].posKey === GameBoard.posKey) {
-            r++;
-        }
+  for (i = 0; i < GameBoard.hisPly; ++i) {
+    if (GameBoard.history[i].posKey === GameBoard.posKey) {
+      r++;
     }
-    return r;
+  }
+  return r;
 }
 
 function checkResult() {
-    if (GameBoard.fiftyMove >= 100) {
-        $('#GameStatus').text('GAME DRAWN {fifty move rule}');
-        return BOOL.TRUE;
+  if (GameBoard.fiftyMove >= 100) {
+    $('#GameStatus').text('GAME DRAWN {fifty move rule}');
+    return BOOL.TRUE;
+  }
+
+  if (threeFoldRep() >= 2) {
+    $('#GameStatus').text('GAME DRAWN {3-fold repetition}');
+    return BOOL.TRUE;
+  }
+
+  if (drawMaterial() === BOOL.TRUE) {
+    $('#GameStatus').text('GAME DRAWN {insufficient material to mate}');
+    return BOOL.TRUE;
+  }
+
+  generateMoves();
+
+  let MoveNum = 0;
+  let found = 0;
+
+  for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
+
+    if (makeMove(GameBoard.moveList[MoveNum]) === BOOL.FALSE) {
+      continue;
     }
+    found++;
+    takeMove();
+    break;
+  }
 
-    if (threeFoldRep() >= 2) {
-        $('#GameStatus').text('GAME DRAWN {3-fold repetition}');
-        return BOOL.TRUE;
-    }
+  if (found !== 0) return BOOL.FALSE;
 
-    if (drawMaterial() === BOOL.TRUE) {
-        $('#GameStatus').text('GAME DRAWN {insufficient material to mate}');
-        return BOOL.TRUE;
-    }
+  const InCheck = squareAttacked(GameBoard.pList[pieceIndex(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
 
-    generateMoves();
-
-    let MoveNum = 0;
-    let found = 0;
-
-    for (MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum) {
-
-        if (makeMove(GameBoard.moveList[MoveNum]) === BOOL.FALSE) {
-            continue;
-        }
-        found++;
-        takeMove();
-        break;
-    }
-
-    if (found !== 0) return BOOL.FALSE;
-
-    const InCheck = squareAttacked(GameBoard.pList[pieceIndex(Kings[GameBoard.side],0)], GameBoard.side ^ 1);
-
-    if (InCheck === BOOL.TRUE) {
-        if (GameBoard.side === COLORS.WHITE) {
-            $('#GameStatus').text('GAME OVER {black mates}');
-            return BOOL.TRUE;
-        } else {
-            $('#GameStatus').text('GAME OVER {white mates}');
-            return BOOL.TRUE;
-        }
+  if (InCheck === BOOL.TRUE) {
+    if (GameBoard.side === COLORS.WHITE) {
+      $('#GameStatus').text('GAME OVER {black mates}');
+      return BOOL.TRUE;
     } else {
-        $('#GameStatus').text('GAME DRAWN {stalemate}');return BOOL.TRUE;
+      $('#GameStatus').text('GAME OVER {white mates}');
+      return BOOL.TRUE;
     }
+  } else {
+    $('#GameStatus').text('GAME DRAWN {stalemate}');return BOOL.TRUE;
+  }
 }
 
 function checkAndSet() {
-    if (checkResult() === BOOL.TRUE) {
-        GameController.GameOver = BOOL.TRUE;
-    } else {
-        GameController.GameOver = BOOL.FALSE;
-        $('#GameStatus').text('');
-    }
+  if (checkResult() === BOOL.TRUE) {
+    GameController.GameOver = BOOL.TRUE;
+  } else {
+    GameController.GameOver = BOOL.FALSE;
+    $('#GameStatus').text('');
+  }
 }
 
 function preSearch() {
-    if (GameController.GameOver === BOOL.FALSE) {
-        SearchController.thinking = BOOL.TRUE;
-        setTimeout(function() {
-            startSearch();
-        }, 200);
-    }
+  if (GameController.GameOver === BOOL.FALSE) {
+    SearchController.thinking = BOOL.TRUE;
+    setTimeout(function() {
+      startSearch();
+    }, 200);
+  }
 }
 
 function startSearch() {
 
-    SearchController.depth = MAXDEPTH;
-    const tt = $('#ThinkTimeChoice').val();
+  SearchController.depth = MAXDEPTH;
+  const tt = $('#ThinkTimeChoice').val();
 
-    SearchController.time = parseInt(tt) * 1000;
-    searchPosition();
+  SearchController.time = parseInt(tt) * 1000;
+  searchPosition();
 
-    makeMove(SearchController.best);
-    moveGuiPiece(SearchController.best);
-    checkAndSet();
+  makeMove(SearchController.best);
+  moveGuiPiece(SearchController.best);
+  checkAndSet();
 }
 
 export {
-    newGame,
-    clearAllPieces,
-    setInitialBoardPieces,
-    deselectSquare,
-    setSqSelected,
-    clickedSquare,
-    makeUserMove,
-    pieceIsOnSquare,
-    removeGuiPiece,
-    addGuiPiece,
-    moveGuiPiece,
-    drawMaterial,
-    threeFoldRep,
-    checkResult,
-    checkAndSet,
-    preSearch,
-    startSearch
+  newGame,
+  clearAllPieces,
+  setInitialBoardPieces,
+  deselectSquare,
+  setSqSelected,
+  clickedSquare,
+  makeUserMove,
+  pieceIsOnSquare,
+  removeGuiPiece,
+  addGuiPiece,
+  moveGuiPiece,
+  drawMaterial,
+  threeFoldRep,
+  checkResult,
+  checkAndSet,
+  preSearch,
+  startSearch
 };

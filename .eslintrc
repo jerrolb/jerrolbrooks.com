@@ -74,7 +74,7 @@
     "quotes": [2, "single"],
     "no-extra-parens": 0,
     "no-unused-vars": 1,
-    "indent": 2,
+    "indent": ["error", 2],
     "no-catch-shadow": 2,
     "arrow-parens": [2, "always"],
     "jsx-quotes": [2, "prefer-double"],

@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "website-57aa0",
+    "staging": "website-57aa0"
+  },
+  "targets": {},
+  "etags": {}
+}
